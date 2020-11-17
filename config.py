@@ -10,8 +10,7 @@ class Config (object) :
     # MySQL CONfigurations
     MYSQL_USER = 'rot'
     MYSQL_DATABASE = 'nancy'
-    MYSQL_PASSWORD = 'cuckoo'
-    MYSQL_DATABASE	= 'nancy'
+    MYSQL_PASSWORD = ''nancy'
 
     # Falsk-mail Configs 
     MAIL_SERVER = 'smtp.gmail.com'
