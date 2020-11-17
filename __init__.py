@@ -3,6 +3,7 @@ from flask import Flask
 from functools import wraps
 from flask_mail import Mail
 
+#This is just a test"
 
 def create_app():
     """Create Flask application."""
