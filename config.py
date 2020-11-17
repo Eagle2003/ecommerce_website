@@ -8,7 +8,7 @@ class Config (object) :
     MAX_CONTENT_LENGTHs = 4 * 1024 * 1024 #4mb max file size
 
     # MySQL CONfigurations
-    MYSQL_USER = 'root'
+    MYSQL_USER = 'rot'
     MYSQL_DATABASE = 'nancy'
     MYSQL_PASSWORD = 'cuckoo'
     MYSQL_DATABASE	= 'nancy'
