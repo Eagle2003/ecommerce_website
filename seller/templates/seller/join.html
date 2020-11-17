@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+
+	body {
+        background-image: url('{{ url_for("static", filename="backgrounds/login.jpg")}}');
+        background-repeat: no-repeat;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover; 
+	}
+
+ .title {
+    padding: 0px 10px 0px 10px;
+    margin-bottom: 5%;
+    font-size: 34px ;
+    font-weight: 500;
+    line-height: 40px;
+    color: teal;
+    text-align: center;
+  }
+
+.caption{
+  font-weight: 600;
+  color: teal;
+  
+}
+
+.input-field{
+  font-weight: 500;
+}
+
+  
+
+</style>
+
+
+<div class="row valign-wrapper" style="height: 90%;">
+  <div class="col s12 m10 l6 offset-m1 offset-l3">
+    <div class="card white" >
+      <div class="card-content white-text">
+        <h3 class="title">Hi there, Lets take your business online</h3>
+      
+        
+        <form method="POST" enctype="multipart/form-data">
+          
+          {{ form.hidden_tag() }}
+          <div class="row">
+            <p class="caption">
+              Lets start of with the basics, What would your like to call you Shop ?
+            </p>
+            <div class="input-field col s12 ">
+              {{ form.name.label }}
+              {{ form.name(type='text', size=32 ) }}    
+              {% for error in form.name.errors %}
+              <span style="color: red;">{{ error }}</span>
+              {% endfor %}
+            </div>
+          </div>
+        
+
+          <div class="row">
+            <p class="caption">
+              We like to keep things legal here, so please provide us with your registred trade license for verification
+            </p>
+            <div class="input-field  col s12 ">
+              {{ form.tradeLicense.label }}
+              {{ form.tradeLicense(type='text', size=32 ) }}    
+              {% for error in form.tradeLicense.errors %}
+              <span style="color: red;">{{ error }}</span>
+              {% endfor %}
+              </div>
+          </div>
+  
+          <div class="row">
+            <p class="caption">
+              A snapshot of your brick and motar store 
+            </p>
+  
+            <div class="col s10 ">
+              <div class="file-field input-field">
+                <div class="btn">
+                  <span>File</span>
+                  <input name="image" onchange="loadFile(event)" type="file">
+                </div>
+                <div class="file-path-wrapper">
+                  {{form.image.label}}
+                  {{ form.image(type='text', class='file-path validate' ) }}    
+                  {% for error in form.image.errors %}
+                  <span style="color: red;">{{ error }}</span>
+                  {% endfor %}
+                </div>
+              </div>s
+            </div>
+              
+            <div class=" col s2 center" style="height: 10%;">
+              <img id="picture-preview" class="responsive-img "src="{{ url_for('static', filename='ui/upload.png')}}">  
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="col s2 offset-s10">
+              <button class="btn flow-text waves-effect waves-light  flow-text right" name="sumbit" type="submit">Submit<i class="material-icons right">send</i></button>
+            </div>
+          </div>
+  
+        </form>
+      
+      </div>  
+    </div>
+  </div>
+</div>
+
+<script>
+  function loadFile(event) {
+    var output = document.getElementById('picture-preview');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src) // free memory
+    }
+  }
+</script>
+
+{% endblock %}

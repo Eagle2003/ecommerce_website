@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Header -->
+<div class="row">
+    <div class="col s12">
+        <h3 class="teal-text">Saved Address</h3>
+    </div>
+</div>
+
+<!-- The cart itself  -->
+<div class="row">
+    <div class="col s12 m10 offset-m1 ">
+       <div class="card-panel", style="padding:0">
+           {% if addresses | length != 0  %} 
+            <!-- Collapsible Collection -->
+            <ul class="collapsible" data-collapsible="">
+        
+                {% for address in addresses %}
+
+                <li>
+                        <div class="collapsible-header white hoverable ">
+                            <h3 class="flow-text deep-orange-text truncate">{{address.name}}</h3>     
+                        </div>
+                        <div class="collapsible-body white " style="padding-bottom:0;">
+                            <div class="row">                                                                   
+                                <div class="col s12">
+                                    <p>Emirate : <b>{{address.line1}}</b></p>
+                                    <p> Street :<b>{{address.line2}}</b></p>
+                                    <p> Home  : <b>{{address.line3}}</b></p>
+                                </div>
+                                <div class="col s12 center-align">
+                                    <form>
+                                        <br>
+                                        <input name="delete" class="hide" value="{{address.id}}">
+                                        <button style="font-weight: 500;" class="waves-effect  waves-teal btn-flat">Delete Card</Button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    
+                </li>
+                {% endfor %}
+
+
+            </ul>
+            {% else %}
+            <!-- No item in cart here  -->
+            <div class="row  center-align" style="height: 300px;">
+                
+                <i class="material-icons large deep-orange-text" style="margin-top:50px">looks</i><br>
+                <h3 class="teal-text">Nothing but a great empty here </h3> 
+                                
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+<!-- Checkout button -->
+<div class="row">
+    <div class="col s12  m6 offset-m3">
+        <a style="width: 100%;font-weight: 600; font-size: large;" data-target="add-address" class="waves-effect  modal-trigger waves-light btn btn-large ">ADD ADDRESS</a>
+    </div>
+</div>
+
+<br>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems);
+  });
+</script>
+<script src="{{ url_for('static', filename='js/validator.js') }}"></script>
+
+{% include 'user/addAddress.html'%}
+{% endblock %}

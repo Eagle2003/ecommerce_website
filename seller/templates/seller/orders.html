@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+   
+ 
+</style>
+
+{% include 'seller/profile.html' %}
+
+
+<!-- Header -->
+<div class="row">
+    <div class="col s12">
+        <h3 class="teal-text">Orders</h3>
+    </div>
+</div>
+<div class="row" >
+    {% include 'filters.html' %}
+
+    <div class="col s12 l9" >
+        
+        {% if orders | length != 0  %} 
+            <!-- Collapsible Collection -->
+            <ul class="collapsible white " data-collapsible="">
+        
+                {% for order in orders %}
+
+                <li>
+                    <div class="collapsible-header white  ">
+                        <div class="row" style="width: 100%; ">
+                            <div class="col  s3  m2 ">
+                                <img class="responsive-img product-image" src="{{ url_for('media.images', root='productImages', scale=40, filename=order.images[0] ) }}">
+                            </div>
+                            <div class="col s9 m10">
+                                <h3 class="product-title flow-text deep-orange-text truncate">{{order.name}}</h3>     
+                                <span class="tags right deep-orange white-text " >Dhs {{ order.sale_price }}</span> 
+                                <p class="tags white-text left">Order Status : {{order.status}}</p>
+                            </div>
+                        </div>                    
+                    </div>
+                    <div class="collapsible-body white " style="padding-bottom:0;">
+                        <div class="row">
+                            <form method="POST">
+                            <div class="col s12">
+                                {{ form.hidden_tag( ) }}
+                                {{ form.order_id(value=order.id, class='hide')}}
+                                {% if order.state == 1 %}
+                                {{ form.orderPrepared( class='btn btn-flat btn-med  waves-light') }}
+                                {{ form.cancelOrder( class='btn btn-flat btn-med  waves-light')}}
+                                {% endif %}
+                                <a class="btn btn-flat btn-med" href="{{url_for('shop.product', productID=order.product_id) }}">View Product</a>
+                            </div>
+                            </form>
+                        </div>
+                        <div class="row">
+                            <!-- The addess Panel -->
+                            <div class="col s12 m6">
+                                <div class="card-panel teal white-text" style="font-weight: 500;">
+                                    <h5 style="margin-top: 5px;"class="yellow-text">Delivery Address</h5>
+                                    Emirate : {{order.line1}}<br>
+                                    Street Addres : {{order.line2}}<br>
+                                    Home Address : {{order.line3}}
+                                </div>
+                            </div>
+                            <!-- add updates for the order -->
+                            <div class="col s12 m6 white-text">
+                                <div class="card-panel teal">
+                                    <h5 class="yellow-text"style="margin-top:5px">Order Information</h5>
+                                    <p>Order Placed On : {{order.date_of_issue}} </p>
+                                    <p>Order Place by : {{order.buyer}}</p>
+                                    {% if order.state == 4 %}
+                                    <p>Order Delivered On : {{order.date_of_completion.strftime("%d %B %Y")}}</p>
+                                    {% elif order.state == -2 or order.state == -1%}
+                                    <p>Order Cancelled On : {{order.date_of_return.strftime("%d %B %Y")}}</p>
+                                    {% endif %}
+
+                                </div>
+                                
+                            </div>
+                            <!-- Other Order Metadata -->
+                            <div class=" col s12 m6 white-text">
+                                
+                            </div>
+                            
+                        <form method="POST">
+                            
+                            
+                        </div>
+                        </form>                        
+
+                    </div>
+                    
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <!-- No item in cart here  -->
+            <div class="row  center-align card-panel " style="height: 300px;">
+                
+                <i class="material-icons large deep-orange-text" style="margin-top:50px">looks</i><br>
+                <h3 class="teal-text">Nothing but a great empty here </h3> 
+                                
+            </div>
+            {% endif %}
+    </div>
+</div>
+{% include 'pagenation.html' %}
+
+<script>
+    
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems);
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems);
+  });
+
+</script>
+
+{% endblock %}

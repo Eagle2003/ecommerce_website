@@ -1,0 +1,178 @@
+{% extends "base.html" %}}
+{% block content %}
+
+<!-- Flickty CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/flickity.css') }}" media="screen">
+
+
+<style>
+    .breadcrumbs {
+        border-radius: 25px;
+        height:30px;
+        width: fit-content;
+        padding: 5px 10px 5px 10px ;
+
+    }
+</style>
+
+
+<div class="row ">
+    <div class="col s12 valign-wrapper">
+        <span class="white-text center center-align breadcrumbs deep-orange truncate hoverable  ">{{product.category}}</span>
+        <i class="material-icons  small">keyboard_arrow_right</i>
+        <span class="white-text center center-align breadcrumbs deep-orange truncate hoverable ">{{product.subcategory}}</span>
+        <i class="material-icons  small">keyboard_arrow_right</i>
+        <span class="white-text center center-align breadcrumbs deep-orange truncate hoverable  ">{{product.item}}</span>
+    </div>
+</div>
+
+<div class="row">
+    <!-- The Product Showcase  -->
+    <div class="col s12 m5" >
+        
+        <!-- The main carousel -->
+        <div class=" carousel-main " style=" margin: 10px;z-index: 200;" data-flickity='{"freeScroll": true, "lazyLoad":1,  "pageDots": false, "wrapAround": true, "prevNextButtons": false}' >
+            {% for image in product.images %}
+            <div style="width: 100%;  height: fit-content;" class=" white center-align carousel-cell">
+                <img class="responsive-img  materialboxed "  style="display: block; margin-right: auto; margin-left: auto;" data-flickity-lazyload="{{url_for('media.images', scale=100, root='productImages', filename=image)}}" alt="{{ product.name }}"/>
+            </div>
+            {% endfor %} 
+            
+        </div>
+
+ 
+
+        <!-- The navigating carousel -->
+        <div class="carousel" style="height: 100px; margin-top: 30px;" data-flickity='{"freeScroll": true, "setGallerySize": false, "contain":true, "asNavFor":".carousel-main", "lazyLoad":1,  "pageDots": false}'>
+            {% for image in product.images %}
+            <div class="carousel-cell">
+                <img class="carousel-image "  data-flickity-lazyload="{{url_for('media.images', root='productImages', scale=20, filename=image)}}" alt="{{ product.name }}"/>
+            </div>
+            {% endfor %}
+
+        </div>
+
+                <!-- Initialize the image modal  -->
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var elems = document.querySelectorAll('.materialboxed');
+                        var instances = M.Materialbox.init(elems);
+                    });
+                </script>
+
+
+    </div>
+
+    <style>
+        .product-heading {
+            text-transform: capitalize;
+            font-weight: 500;
+        }
+        
+
+        .tags {
+            padding: 5px 10px 5px 10px;
+            border-radius: 25px ;  
+            font-size: medium;
+            margin: 5px; 
+
+        }
+        .product-price {
+            padding: 5px 10px 5px 10px;
+            border-radius: 25px;
+            display: block;
+            width: fit-content;
+        }
+        .product-descritption {
+            font-size: large;
+        }
+        .buy-btn {
+            margin-top: 20px;
+            margin-right: 20px;
+            font-weight: 700;
+            width: 100%;
+            /* font-size: small; */
+        }
+      
+    </style>
+    <!-- Basic Info -->
+    <div class="col s12 m6 ">
+        <h5 class=product-heading>{{product.name}}</h5><br>
+        <span class="tags teal white-text ">Dhs {{product.list_price}}</span>
+        <span class="tags  teal white-text "> Now Selling at {{product.discount}}% discount </span><br>
+        {% if product.quantity == 0 %}
+        <span class="tags deep-orange white-text "> Product Out Of Stock  </span><br>
+        {% elif not  product.active %}
+        <span class="tags deep-orange white-text "> Product Not Availble  </span><br>
+        {% endif %}
+        <h5 class="product-price deep-orange white-text " >Dhs {{ product.display_price}}</h5><br> 
+        <div class="row" >
+            <form id="product-form" action="{{url_for('shop.cart')}}?redirect={{request.path}}" method="POST">
+                {{ form.hidden_tag()}}
+                {{ form.productID(value=product.id, class="hide") }}
+                <div class="col s7  l4">
+                    <p class="range-field">
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <!-- Item Quantity Selector  -->
+                                <select id="quantity" name="quantity">
+                                {% for i in range(product.quantity) %}
+                                <option value="{{i+1}}" > {{i+1}}</option>
+                                {% endfor %}
+                                </select>
+                                <label style="font-weight: 600;">Quantity</label>
+                            </div>
+                        </div>
+                    </p>               
+                </div>
+                <div class="col s6 l4 ">
+                    <!-- Add procut to cart  -->
+                    <button class=" deep-orange buy-btn btn btn-large waves-effect waves-light form-submit flow-text {{ 'disabled' if product.quantity  == 0  or  not product.active }}" type="submit" name="add_to_cart" value="Add To Cart">
+                        <i class="material-icons left">add_shopping_cart</i>
+                        Add To Cart
+                    </button>
+                </div>
+                <div class="col s6 l4">
+                    <!-- Buy product immideltely -->
+                    <button onclick="buyNow()" type="button" class="deep-orange buy-btn btn btn-large waves-effect waves-light {{ 'disabled' if product.quantity  == 0 or  not product.active }}"  name="action">
+                        <i class="material-icons left">fast_forward</i>
+                        <span class="">Buy Now</span>
+                    </button>
+                </div>
+            </form>
+            
+            
+        </div>
+        
+
+        <br>
+
+        <div class="card teal white-text">
+            <div class=card-content>
+                <span class="card-title yellow-text" style="font-weight:500">Product Description</span>
+                <p class="product-description">
+                    Sold By : {{product.seller}}<br>
+                    Manufactured By : {{product.manufacturer}} <br>
+                    {{ product.description}}
+                </p>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        // M.Range.init(document.getElementById("quantity"))
+        M.FormSelect.init(document.getElementById("quantity"))
+        function buyNow() {
+            let form  = document.getElementById("product-form")
+            form.method ="GET"
+            form.action = "{{url_for('shop.checkout')}}"
+            form.submit()
+        }
+    </script>
+    <script src="{{url_for('static', filename='js/formSubmit.js')}}"></script>
+</div>
+
+
+
+{% endblock %}

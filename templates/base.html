@@ -1,0 +1,198 @@
+<html>
+	<head>
+		<title>Nancy - A New Perspective</title>
+		
+		<link rel='shortcut icon' type='image/png' href='{{url_for('static', filename='ui/logo.png')}}' />
+
+			<!-- Materailze Css Framework -->
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/materialize.css') }}">
+
+		<!-- Materilaize Javascript  -->
+		<script src="{{ url_for('static', filename='js/materialize.js') }}"></script>
+
+		<!-- Tell browser webiste is compatablie with mobile screen -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		
+	</head>
+
+	
+	<body  class="orange lighten-5">
+	<main>
+
+		<style>
+		
+		
+		main{
+			min-height: 600px;
+		}
+		</style>
+		
+		<!-- nav bar -->
+		<div id="nav-bar" class="navbar-fixed ">
+			<nav>
+				<div class="nav-wrapper ">
+				
+					
+					<a href="{{ url_for('shop.landing') }}" class="brand-logo">NANCY</a>
+					<a href="#" data-target="mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+
+					<ul id="nav-mobile" class="right hide-on-med-and-down" style="width: fit-content;">
+						
+						{% if session.AUTHENTICATED %}
+						<li><a href="{{ url_for('shop.landing') }}">SHOP</a></li>
+						<li><a href="{{ url_for('shop.cart') }}">CART</a></li>
+						<li><a href="{{url_for('user.dashboard')}}">DASHBOARD</a></li>
+						<li><a href="{{url_for('seller.dashboard')}}" >STORE</a></li>
+						<li ><a  href="{{url_for('auth.logout') }}">LOGOUT</a></li>
+						<li><a style="height:64px" class="valign-wrapper">
+							<img  style="height:50px; width:50px" class="responsive-img circle" src="{{url_for('media.user_profile', scale=100) }}?id={{session.PROFILE_PICTURE}}">
+						</a></li>
+
+						{% else %}
+						<li><a href="{{ url_for('shop.landing') }}">SHOP</a></li>
+						<li ><a href="{{ url_for('auth.login') }}">LOGIN</a></li>
+						{% endif %}
+												
+					</ul>
+					
+					
+					
+										
+				</div>
+			</nav>
+
+			
+		</div>
+	
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+			var elems = document.querySelectorAll('.sidenav');
+			var instances = M.Sidenav.init(elems);
+			});
+		</script>
+
+
+		
+
+		<ul class="sidenav" id="mobile">
+			<li><a href="{{ url_for('shop.landing') }}">SHOP</a></li>
+			<li><a href="{{ url_for('shop.cart') }}">CART</a></li>
+			{% if session.AUTHENTICATED %}
+			<li><a href="{{url_for('user.dashboard')}}">DASHBOARD</a></li>
+			<li><a href="{{url_for('seller.dashboard')}}" >STORE</a></li>
+			<li><a href="{{url_for('auth.logout') }}">LOGOUT</a></li>
+			{% else %}
+			<li><a href="{{ url_for('auth.login') }}">LOGIN</a></li>
+			{% endif %}
+		</ul>
+
+		{% if searchbar %}
+		<!-- Search bar -->
+		<div class="row">
+		  <div class="col s12 m10 l8 offset-l2 offset-m1 ">
+			<div id="search-bar"  class="hoverable  white row">
+			 
+			  <form id="search-form" action="{{ url_for('shop.search') }}">
+		
+				<div id="input-col" class="col white input-field s11" >
+				  <input type="search" name="search" id="search-input" class=" search-input autocomplete white " placeholder="A Galaxy of products await ..." autocomplete=off ></input>
+				</div>
+		  
+				
+				<div id="search-icon-continer" class="col  s1" style="padding: 0;">
+				  <button id="search-btn" type="submit" class=" white-text  waves-effect waves-light btn-flat">
+					<i id="search-icon" class="material-icons small">search</i> 
+				  </button>
+				</div>
+		
+			  </form>
+			  		 
+			  
+			</div>
+		
+		  </div>
+		</div> 
+
+		
+		<!-- Autocomplete  -->
+		<script>
+			const quickSearchURL = "{{url_for('shop.search')}}?API=true&speed=QUICK"
+		</script>
+		<script src="{{ url_for('static', filename='js/searchBar.js') }}"></script>
+		{% endif %}
+		<script>
+			document.addEventListener('DOMContentLoaded', ()=>{M.updateTextFields();});
+		</script>
+
+		
+		<!-- <div class="container"> -->
+		{% block content %}
+
+		
+		{% endblock %}
+
+		<!-- </div> -->
+		
+		
+
+		<!-- Toasts to flash any messages  -->
+		{% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <script>
+            {% for message in messages %}
+            M.toast({html: '{{message}}'})
+			{% endfor %}
+        </script>
+		{% endif %}
+        {% endwith %}
+	
+	</main>
+
+	<!-- A simple though provoking filter -->
+	<footer class="page-footer deep-orange">
+		<div class="container">
+		  <div class="row">
+			<div class="col l6 s12">
+			  <h5 class="white-text">NANCY Private Enterprises</h5>
+			  <p class="grey-text text-lighten-4">
+				  Driven by the passion to create, we always beleive there is room for improvement. 
+				  Lets us know your feedback at notareal@mailid.com
+			 </p>
+			</div>
+			<div class="col l4 offset-l2 s12">
+			  <h5 class="white-text">Links</h5>
+			  <ul>
+				<li><a class="grey-text text-lighten-3" href="#!">Contact Us</a></li>
+				<li><a class="grey-text text-lighten-3" href="#!">Login In</a></li>
+				<li><a class="grey-text text-lighten-3" href="#!">Home page</a></li>
+				<li><a class="grey-text text-lighten-3" href="#!">Licenses</a></li>
+			  </ul>
+			</div>
+		  </div>
+		</div>
+		<div class="footer-copyright">
+		  <div class="container">
+		  © 2060 Copyright Text
+		  <a class="grey-text text-lighten-4 right" href="#!">No More LInks Really</a>
+		  </div>
+		</div>
+	  </footer>
+	  <!-- <script>
+		   M.AutoInit();
+		   console.log('Initlaized')
+	  </script> -->
+	</body>
+
+<!-- Material Icons  -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!-- Flickty Js -->
+<script src="{{ url_for('static', filename='js/flickity.js')}}"></script>
+
+<!-- Style Sheet for searchbar -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/search_bar.css')}}">
+
+<!-- Style Sheet for some general asthetic changess -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/basic_styles.css')}}">
+
+</html>

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+    
+<style>
+    body {
+        background-image: url('{{ url_for("static", filename="backgrounds/login.jpg")}}');
+        background-repeat: no-repeat;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover; 
+    }
+    .title {
+        font-weight: 600;
+    }
+    .input-field {}
+      
+</style>
+
+
+<!-- Register Card -->
+
+<div class="row" style="margin-top: 10%; margin-bottom: 10%;">
+    <div class="col offset-m3 s12 m6">
+        <div class="card white">
+            <div class="card-content white-text">
+                <h3 class=" center-align  deep-orange-text">Hi there, Let's be friends !</h3>
+            
+                <!-- Login Form -->
+                <div class="row">
+                    <form class="col s12" action="" method="POST" >
+                        <!-- CRSF Token -->
+                        {{ form.hidden_tag() }}
+
+                        <!-- Email -->
+                        <div class="row">
+                            <div class="input-field col s12">
+                                {{ form.email.label }}
+                                {{ form.email(type='email', size=32) }}    
+                                {% for error in form.email.errors %}
+                                <span style="color: red;">{{ error }}</span>
+                                {% endfor %}
+                                
+                            </div>
+                        </div>
+
+                        
+                    
+                        <!-- Password -->
+                        <div class="row">
+                            <div class="input-field col s6">
+                                {{ form.password.label }}
+                                {{ form.password(size=32, class="validate") }}
+                                {% for error in form.password.errors %}
+                                <span style="color: red;">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="input-field col s6">
+                                {{ form.confirm.label }}
+                                {{ form.confirm(size=32, class="validate") }}
+                                {% for error in form.confirm.errors %}
+                                <span style="color: red;">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Sumbit Button -->
+                        <div class="row">
+                            <div class="col s6">
+                                {# Redirect to signup #}
+                                <a href="{{ url_for('auth.login')}}" class="waves-effect waves-teal btn-flat">Already, have an account ?</a>
+                            </div>
+                            
+                            <div class="col s6">
+                                <button class="btn waves-effect waves-light  right" name="sumbit" type="submit">Submit
+                                    <i class="material-icons right">send</i>
+                                </button>
+                            </div>
+                            
+                        </div>
+                        
+
+                    </form>
+                </div>    
+            </div>
+        </div>
+    </div>
+</div>
+   
+
+    
+
+{% endblock %}

@@ -1,0 +1,152 @@
+<html>
+	<head>
+		<title>My Personal DropBox</title>
+		
+			<!-- Compiled and minified CSS -->
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/materialize.css') }}">
+
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+
+		
+
+		<!-- Tell browser webiste is compatablie with mobile screen -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+		<!-- Compiled and minified JavaScript -->
+		<script src="{{ url_for('static', filename='js/materialize.js') }}"></script>
+
+		<!-- Style Sheet for searchbar -->
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/search_bar.css')}}">
+		
+	</head>
+
+	
+
+	<body class="orange lighten-5">
+		
+		<!-- nav bar -->
+		<div class="navbar-fixed ">
+			<nav>
+				<div class="nav-wrapper ">
+				
+					<a href="{{ url_for('shop.landing') }}" class="brand-logo">NANCY</a>
+					<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+
+					<ul id="nav-mobile" class="right hide-on-med-and-down">
+					<li><a href="{{ url_for('shop.landing') }}">Home</a></li>
+					<li><a href="{{ url_for('shop.cart') }}">Cart</a></li>
+					<li><a href="{{ url_for('auth.login') }}">Login</a></li>
+					</ul>
+										
+				</div>
+			</nav>
+
+			<ul class="sidenav" id="mobile-demo">
+				<li><a href="{{ url_for('shop.landing') }}">Home Page</a></li>
+				<li><a href="{{ url_for('auth.register') }}">Join Us</a></li>
+				<li><a href="{{ url_for('auth.login') }}">Login</a></li>
+			</ul>
+	
+			<script>
+				document.addEventListener('DOMContentLoaded', function() {
+				var elems = document.querySelectorAll('.sidenav');
+				var instances = M.Sidenav.init(elems);
+				});
+			</script>
+
+
+		</div>
+
+		<!-- Search bar -->
+		
+
+		<div class="row">
+		  <div class="col s12 m10 l8 offset-l2 offset-m1 ">
+			<div id="search-bar"  class="hoverable  white row">
+			 
+			  <form id="search-form" action="{{ url_for('shop.search') }}">
+		
+				<div id="input-col" class="col white input-field s11" >
+				  <input type="search" name="search" id="search-input" class=" search-input autocomplete white " placeholder="A Galaxy of products await ..." autocomplete=off ></input>
+				</div>
+		  
+				
+				<div id="search-icon-continer" class="col  s1" style="padding: 0;">
+				  <button id="search-btn" type="submit" class=" white-text  waves-effect waves-light btn-flat">
+					<i id="search-icon" class="material-icons small">search</i> 
+				  </button>
+				</div>
+		
+			  </form>
+			  		 
+			  
+			</div>
+		
+		  </div>
+		</div> 
+
+		
+		<!-- Autocomplete  -->
+
+		<script>
+			const quickSearchURL = "{{url_for('shop.quickSearch')}}"
+		</script>
+		<script src="{{ url_for('static', filename='js/searchBar.js') }}"></script>
+
+
+		
+		
+		{% block content %}
+		{% endblock %}
+		
+	
+		<!-- Material Icons  -->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<!-- Flickty Js -->
+		<script src="{{ url_for('static', filename='js/flickity.js')}}"></script>
+
+
+		<!-- Toasts to flash any messages  -->
+		{% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <script>
+            {% for message in messages %}
+            M.toast({html: '{{message}}'})
+            {% endfor %}
+        </script>
+        {% endif %}
+        {% endwith %}
+	
+	</body>
+
+	<footer class="page-footer deep-orange">
+		<div class="container">
+		  <div class="row">
+			<div class="col l6 s12">
+			  <h5 class="white-text">NANCY Private Enterprises</h5>
+			  <p class="grey-text text-lighten-4">
+				  Driven by the passion to create, we always beleive there is room for improvement. 
+				  Lets us know your feedback at notareal@mailid.com
+			 </p>
+			</div>
+			<div class="col l4 offset-l2 s12">
+			  <h5 class="white-text">Links</h5>
+			  <ul>
+				<li><a class="grey-text text-lighten-3" href="#!">Contact Us</a></li>
+				<li><a class="grey-text text-lighten-3" href="#!">Login In</a></li>
+				<li><a class="grey-text text-lighten-3" href="#!">Home page</a></li>
+				<li><a class="grey-text text-lighten-3" href="#!">Licenses</a></li>
+			  </ul>
+			</div>
+		  </div>
+		</div>
+		<div class="footer-copyright">
+		  <div class="container">
+		  © 2060 Copyright Text
+		  <a class="grey-text text-lighten-4 right" href="#!">No More LInks Really</a>
+		  </div>
+		</div>
+	  </footer>
+
+</html>

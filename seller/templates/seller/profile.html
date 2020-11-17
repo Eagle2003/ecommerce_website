@@ -1,0 +1,45 @@
+<style>
+    .store-cover{
+        height: 40%;
+        background-image: url("{{url_for('media.images', root='storeCover', filename=session['SELLER_COVER'], scale=100)}}");
+        background-repeat: no-repeat;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+    .store-image{
+        margin-top: 10px;
+        outline: black;
+    }
+    .store-title{
+        position: absolute;
+        bottom: 0;
+        width: fit-content;
+        border-radius: 100px;
+        padding: 0 10 5 10;
+        backdrop-filter: blur(20px);        
+    }
+ 
+</style>
+
+<!-- The Banner -->
+<div class="row"  style="position: relative;">
+    <div class="store-cover" >
+        <div style="height: 70%;" class="row valign-wrapper">
+            <div class="col s6 m4 l2 offset-l5 offset-m4 offset-s3 " style="" >
+                <div class="aspect-ratio-box">
+                    <img class=" z-depth-2 store-image circle  responsive-img" src="{{url_for('media.images', root='storeProfile', scale=100, filename=session.SELLER_IMAGE) }}">
+                </div>
+            </div>
+        </div>
+        <div class="row center-align center">
+            <h3 class="deep-orange-text store-title " >
+                {{session.SELLER_NAME}}
+            </h3>
+        </div>
+    </div>
+    <!-- The Header -->
+    
+</div>
+

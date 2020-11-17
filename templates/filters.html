@@ -1,0 +1,109 @@
+
+<a data-target="filter-modal" style="border-radius: 25px;" class="waves-effect hide-on-large-only modal-trigger right waves-teal waves-light deep-orange-text">
+    <i style="font-size:3rem"class="material-icons medium">
+        filter_list
+    </i>
+</a>
+
+
+<div class="col s3 hide-on-med-and-down">
+    <div class="card-panel" style="height:fit-content;">
+        <form>
+        <input class="hide" value="{{keyword}}" name="search">
+        <h5 class="teal-text">FILTERS</h5>
+        <!-- Now to popoulate the filters !! -->
+        <div class="row">
+            <!-- Select Filters -->
+            {% for filter, elems in filters.options.items() %}
+            <div class="input-field col s12" style="display: block;">
+                <select id="{{filter}}" name="{{filter}}">
+                <option   value="" disabled selected>Select A {{filter}}</option>
+                {% for elem in elems%}
+                <option id="{{elem}}" value="{{elem}}">{{elem}}</option>
+                {% endfor %}
+                </select>
+                <label>{{filter}}</label>
+            </div>
+            {% endfor %}
+            <br><br>
+            {% if filters.range %}<h6>Ranges</h6>{% endif %}
+            {% for range in filters.range %}
+            <div class="input-field col s12">
+                <input id='{{range}}' name="{{range}}" type="tel" class="validate">
+                <label for="{{range}}">{{range}} Range</label>
+            </div>
+            {% endfor %}
+
+            <br><br>
+            <a href="{{url_for(request.endpoint) }}" class="waves-effect waves-teal left  btn-flat">Clear</a>
+            <button class="waves-effect right waves-light btn">Filter</button>
+        </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- Modal Structure -->
+<div id="filter-modal" class="modal modal-fixed-footer">
+    <form>
+    <div class="modal-content">
+      <h4>Filter Search</h4>
+      
+        <input class="hide" value="{{keyword}}" name="search">
+        <!-- Now to popoulate the filters !! -->
+        <div class="row">
+          <!-- Select Filters -->
+          {% for filter, elems in filters.options.items() %}
+          <div class="input-field col s12" style="display: block;">
+            <select name="{{filter}}">
+            <option value="" disabled selected>Select A {{filter}} </option>
+            {% for elem in elems%}
+            <option value="{{elem}}">{{elem}}</option>
+            {% endfor %}
+            </select>
+            <label>{{filter}}</label>
+          </div>
+          {% endfor %}
+
+          <br><br>
+        <h6>Ranges</h6>
+        {% for range in filters.range %}
+        <div class="input-field col s12">
+            <input  id="modal_{{range}}" name="{{range}}" type="tel" class="validate">
+            <label for="modal_{{range}}">{{range}} Range</label>
+        </div>
+        {% endfor %}
+
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button class="waves-effect right waves-light btn btn-flat">Filter</button>
+    </div>
+  </form>
+</div>
+
+<script>
+    let filters = JSON.parse('{{filters.options.keys() | list | tojson |  safe}}')
+    {% if filters.range %}filters = filters.concat(JSON.parse('{{filters.range | tojson |  safe}}')){% endif %}
+    console.log(filters)
+    const params = new URLSearchParams(window.location.search)
+
+    for (i in filters) {
+        if (params.has(filters[i])){
+            val = params.get(filters[i])
+            select = document.getElementById(filters[i])
+            select.value = val
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.modal');
+        var instances = M.Modal.init(elems, {endingTop:'10%'});
+    });
+</script>

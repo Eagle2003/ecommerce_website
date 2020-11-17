@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+    
+<style>
+	body {
+        background-image: url('{{ url_for("static", filename="backgrounds/login.jpg")}}');
+        background-repeat: no-repeat;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover; 
+	}
+    .title {
+        font-weight: 600;
+    }
+    .input-field {
+        font-weight: 600;
+    }
+    h6 {
+        font-weight: 600;
+    }
+    span{
+        font-weight: 500;
+    }
+</style>
+    <!-- Register Card -->
+    
+    <div class="row valign-wrapper" style="min-height: 85%;">
+        <div class="col  s12 m8 l6 offset-l3 offset-m2  ">
+            <div class="card-panel   white">
+                <h2 class=" title center-align  deep-orange-text" >Product Has Beeen Added Succesfully !</h3>
+
+                <div class="row" style="margin-top: 30px;">
+                    <a href="{{url_for('seller.products')}}" class="waves-effect waves-light btn btn-flat">View All Your Products</a>
+                    <a href="{{url_for('shop.product', productID=product_id)}}" class="waves-effect waves-light btn btn-flat">View The PRouct Page</a>
+                </div>
+                    
+            </div>
+        </div>
+    </div>
+
+   
+
+    
+
+{% endblock %}

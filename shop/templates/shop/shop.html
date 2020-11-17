@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<!-- Flickty CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/flickity.css') }}" media="screen">
+
+
+{# Banner #}
+<div class='row'>
+  <div class="slider">
+    <ul class="slides">
+      <li>
+        <img src="{{ url_for('media.banners', file='open.jpg') }}"> <!-- Opne image -->
+        <div class="caption left-align">
+          <h3>NANCY - Empowering Small Bussiness</h3>
+          <h5 class=" deep-orange-text">Not Another amazonN CompanY</h5>
+        </div>
+      </li>
+      <li>
+        <img src="{{ url_for('media.banners', file='grocery.jpg') }}"> <!-- Grocery image -->
+        <div class="caption center-align">
+          <h3>You'r Local Groceries, at you'r fingertips.</h3>
+          <h5 class=" deep-orange-text">Shopping Made Easy</h5>
+        </div>
+      </li>
+      <li>
+        <img src="{{ url_for('media.banners', file='fashion.jpg') }}"> <!-- Fashion image -->
+        <div class="caption left-align">
+          <h3>Introducing The All New Fashion Store</h3>
+          <h5 class=" deep-orange-text">Being Trendy Has Never Been Easier</h5>
+        </div>
+      </li>
+      <li>
+        <img src="{{ url_for('media.banners', file='technology.jpg') }}"> <!-- Technology image -->
+        <div class="caption right-align">
+          <h3>The Latest Technology <br>at Affordable Price</h3>
+          <h5 class=" deep-orange-text">Update You'r Tech Inventory Today.</h5>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+{# Banner Init #}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  var elems = document.querySelectorAll('.slider');
+  var main_banner = M.Slider.init(elems);
+});
+</script>
+
+
+
+{# Promo Table Cards #}
+<div class="row">
+  {% for promo in promos %}
+  
+  <div class="col  s6  m3 center" >
+    <a class="waves-effect waves-light" href="{{ url_for('shop.search')}}?search={{promo.link}}">
+      <div style="width: 100%; height: auto; padding-bottom: 0;" class="waves-effect promo teal card-panel hoverable  waves-light white-text" >
+        <div class="row">
+          <div class="col s12">
+            <img  class="responsive-img" src="{{ url_for('static', filename=promo.image) }}">
+            <h6 class="truncate">{{promo.title}}</h6>
+          </div>
+        </div>
+      </div> 
+    </a> 
+  </div>
+
+  {% endfor %}
+  
+</div>
+
+
+
+{# Carousel title#}
+{% for title,  carousel in carousels.items() %}
+<div class="row">
+  <div class=" section center row deep-orange-text">
+    <h5 class="carousel-title">{{ title }} </h5> 
+  </div>
+</div>
+{# carousel Body #}
+<div class="row">
+  <div class=" carousel"  data-flickity='{"setGallerySize": true, "autoPlay":true, "freeScroll": true, "lazyLoad":4,  "pageDots": false, "wrapAround": true}' >
+    {%for product in carousel %}
+    <div class=" z-depth-2  carousel-cell">
+      <a href="{{url_for('shop.product', productID=product.id )}}" class="hoverable" style="display: block;">
+        <img class=" carousel-image"  data-flickity-lazyload="{{url_for('media.images', root='productImages', scale=30, filename=product.images[0])}}" alt="{{ product.name }}"/>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endfor %}
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    @media only screen and (max-width: 600px){
+        .product-card {
+            height: 250px !important;
+        }
+    }
+
+    @media only screen and (min-width: 700px){
+        .product-card {
+            height: 300px !important;
+        }
+    }
+
+    @media only screen and (min-width: 900px){
+        .product-card {
+            height: 400px !important;
+        }
+    }
+
+   
+    
+</style>
+
+<div class="row"><div class="col s12">
+    <h4 class="teal-text"> Search results for "{{keyword}}" </h4>
+    <a data-target="filter-modal" style="border-radius: 25px;" class="waves-effect hide-on-large-only modal-trigger right waves-teal waves-light deep-orange-text"><i style="font-size:3rem"class="material-icons medium">filter_list</i></a>
+</div></div>
+
+<div class="row">
+  <!-- The filter bar -->
+  <div class="col s2 hide-on-med-and-down">
+    <div class="card-panel" style="height:fit-content;">
+      <form>
+        <input class="hide" value="{{keyword}}" name="search">
+        <h5 class="teal-text">FILTERS</h5>
+        <!-- Now to popoulate the filters !! -->
+        <div class="row">
+          <!-- Select Filters -->
+          {% for filter, elems in filters.items() %}
+          <div class="input-field col s12" style="display: block;">
+            <select name="{{filter}}">
+            <option value="" disabled selected>Select A {{filter}}</option>
+            {% for elem in elems%}
+            <option value="{{elem[0]}}">{{elem[0]}}</option>
+            {% endfor %}
+            </select>
+            <label>{{filter}}</label>
+          </div>
+          {% endfor %}
+          <br><br>
+          <h6 style="margin-bottom: 0;">Price Range</h6>
+          <div class="input-field col s6">
+            <input id='min_price' name="min_price" type="tel" class="validate">
+            <label for="min_price">Min</label>
+          </div>
+          <div class="input-field col s6">
+            <input id="max_price" name="max_price" type="tel" class="validate">
+            <label for="max_price">Max</label>
+          </div>
+  
+          <button class="waves-effect right waves-light btn">Filter</button>
+      </form>
+    </div>
+      
+    </div>
+  </div>
+  <div class="col s12  l10">
+    <div id='productsRow' class="row">
+
+      <!-- here we popoulate cards -->
+                 
+  </div>
+  </div>
+</div>
+
+
+<!-- Spinner -->
+<div id="preloader" style="margin-left: 50%;" class="preloader-wrapper small active hide ">
+  <div class="spinner-layer spinner-green-only">
+    <div class="circle-clipper left">
+      <div class="circle"></div>
+    </div>
+    <div class="gap-patch">
+      <div class="circle"></div>
+    </div>
+    <div class="circle-clipper right">
+      <div class="circle"></div>
+    </div>
+  </div>
+</div>
+<!-- Modal Structure -->
+<div id="filter-modal" class="modal modal-fixed-footer">
+  <form>
+  <div class="modal-content">
+    <h4>Filter Search</h4>
+    
+      <input class="hide" value="{{keyword}}" name="search">
+      <!-- Now to popoulate the filters !! -->
+      <div class="row">
+        <!-- Select Filters -->
+        {% for filter, elems in filters.items() %}
+        <div class="input-field col s12" style="display: block;">
+          <select name="{{filter}}">
+          <option value="" disabled selected>Select A {{filter}}</option>
+          {% for elem in elems%}
+          <option value="{{elem[0]}}">{{elem[0]}}</option>
+          {% endfor %}
+          </select>
+          <label>{{filter}}</label>
+        </div>
+        {% endfor %}
+        <br><br>
+        <h6 style="margin-bottom: 0;">Price Range</h6>
+        <div class="input-field col s6">
+          <input id='m_min_price' name="min_price" type="tel" class="validate">
+          <label for="m_min_price">Min</label>
+        </div>
+        <div class="input-field col s6">
+          <input id="m_max_price" name="max_price" type="tel" class="validate">
+          <label for="m_max_price">Max</label>
+        </div>
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button class="waves-effect right waves-light btn btn-flat">Filter</button>
+  </div>
+</form>
+</div>
+
+<script>
+    const productURL = "{{url_for('shop.search')}}?API=true&speed=DEEP&"+window.location.href.split('?')[1]
+    const keyword = "{{keyword}}"
+    const mediaURL = "{{ url_for('media.images', root='productImages', scale=50, filename='')}}"
+    const productPageURL = "{{url_for('shop.product', productID='')}}"
+
+    
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems);
+
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems, {endingTop:'10%'});
+  });
+</script>
+<script src="{{url_for('static', filename='js/search.js')}}">
+    
+</script>
+
+{% endblock %}

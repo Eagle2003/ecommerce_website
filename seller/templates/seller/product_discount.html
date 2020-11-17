@@ -1,0 +1,75 @@
+<!-- Modal Structure -->
+<form id="product_discount_form" method="POST" enctype="multipart/form-data">
+{{ discount_form.hidden_tag() }}
+{{ discount_form.product_id(id='product_discount_id', class='hide')}}
+<div id="product_discount_modal" class="modal">
+<div class="modal-content">
+
+    <div class="row">
+        <div class="col s12">
+            <h4 class="teal-text" style="font-weight: 500;" >Set Product Discount</h4>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="  col s4 m3">
+                <img id="product_dicount_image" class="responsive-img " src="">
+        </div>
+        <div class=" deep-orange-text col s8 m9">
+            <h4 id="product_discount_name"></h4>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <form method="POST">
+            <div class=" col s12">
+                <h6 class=" teal-text" id="product_discount_listPrice">List Price : </h6>
+            </div>
+
+            <div class="col input-field s12 m7">
+                {{discount_form.discount(id="product_discount_input")}}
+                {{ discount_form.discount.label(for="product_discount_input") }}
+                <span id="product_discount_input_error" class="red-text">{{ discount_form.discount.errors[0] }}</span>
+            </div>
+        </form>
+    </div>
+
+    
+</div>
+<div class="modal-footer">
+    <button type="button" onclick="update_discount()" class="waves-effect waves-light btn-flat">Submit</button>
+    <a href="#!" class="modal-close waves-effect waves-ligth btn-flat">Close</a>
+</div>
+</div>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems);
+    
+  });
+
+    function open_product_discount_modal(id) {
+        let modal = M.Modal.getInstance(document.getElementById('product_discount_modal'))
+        let data = JSON.parse(document.getElementById(id).dataset.product)[0]
+        console.log(data)
+        document.getElementById('product_dicount_image').src = '{{ url_for('media.images', root='productImages', scale=40, filename='' ) }}' +data.images[0]
+        document.getElementById('product_discount_name').innerHTML = data.name
+        document.getElementById('product_discount_listPrice').innerHTML = `Your Product List Price : Dhs ${data.list_price} `
+        document.getElementById('product_discount_input').value = data.discount
+        document.getElementById('product_discount_id').value = data.id
+
+        modal.open()
+        M.updateTextFields();
+    }
+    
+    function update_discount() {
+        let field = {
+            "product_discount_input" : [data_required ,integer_between(0, 100)]
+        }
+        if (validateForm(field)) {
+            document.getElementById("product_discount_form").submit()
+        }
+    }
+</script>

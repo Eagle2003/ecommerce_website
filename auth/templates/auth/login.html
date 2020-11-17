@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+    
+<style>
+	body {
+        background-image: url('{{ url_for("static", filename="backgrounds/login.jpg")}}');
+        background-repeat: no-repeat;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover; 
+	}
+    .title {
+        font-weight: 600;
+    }
+    .input-field {
+        font-weight: 600;
+    }
+</style>
+    <!-- Register Card -->
+    
+    <div class="row valign-wrapper" style="height: 85%; ">
+        <div class="col  s12 m8 l6 offset-l3 offset-m2  ">
+            <div class="card big  white">
+                <div class="card-content white-text">
+                    <h3 class=" title center-align  deep-orange-text" > Welcome Back</h3>
+                
+                    <!-- Login Form -->
+                    <div class="row">
+                        <form class="col s12" action="" method="POST" >
+                            <!-- CRSF Token -->
+                            {{ form.hidden_tag() }}
+
+                            <!-- Email -->
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    {{ form.email.label }}
+                                    {{ form.email(type='email', size=32, class='flow-text') }}    
+                                    {% for error in form.email.errors %}
+                                    <span style="color: red;">{{ error }}</span>
+                                    {% endfor %}
+                                    
+                                </div>
+                               
+                            </div>
+                            
+                        
+                            <!-- Password -->
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    {{ form.password.label }}
+                                    {{ form.password(size=32, class="validate") }}
+                                    {% for error in form.password.errors %}
+                                    <span style="color: red;">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Sumbit Button -->
+                            <div class="row">
+                                <div class="col s12 m10 offset-m1 center-align ">
+                                    <button style="width: 100%;" class="btn flow-text waves-effect waves-light  flow-text right" name="sumbit" type="submit">Submit</button>
+                                </div>
+                            </div><br>
+                            <div class="row" style="margin-bottom: 0;">
+                                <div class="col s12">
+                                    {# Redirect to register #}
+                                    <a href="{{ url_for('auth.register')}}" class=" btn-flat left waves-effect waves-teal flow-text">Create An account</a>
+                                    <a href="{{ url_for('auth.requestResetPassword')}}" class=" btn-flat left waves-effect waves-teal flow-text">forogt password ?</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>    
+                </div>
+            </div>
+        </div>
+    </div>
+   
+
+    
+
+{% endblock %}

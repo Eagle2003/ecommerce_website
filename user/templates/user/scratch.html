@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .edit-badges{
+        position: relative;
+        bottom: 10;
+        left: 20;
+        border-radius: 25px;
+        padding: 5px 10px 5px 10px;
+        float: right;
+        margin-right: 5%;
+    }
+    div.card-container {
+    -moz-column-width: 23rem;
+    -webkit-column-width: 23rem;
+    -moz-column-gap: 1rem;
+    -webkit-column-gap: 1rem;
+    }
+    .card-panel {
+    display: inline-block;
+    width:  100%;
+    }
+
+    /* .card-panel {
+        height: 300px;
+    } */
+</style>
+<!-- HEading -->
+<div class="row">
+    <div class="col s12 ">
+        <h3 class="deep-orange-text" style="margin-left: 5%;">
+            Dashboard
+        </h3>
+    </div>
+</div>
+
+<!-- Cards with links to other user pages -->
+<div class="row card-container" style="margin: 10px;">
+
+     <!-- User Card -->
+     <!-- <div class="col s12 m6 l4"> -->
+        <div class="card-panel  hoverable teal lighten-1 white-text">
+            <div class="row">
+                <div class="col s3">
+                    <img class="circle responsive-img " src="{{url_for('media.user_profile', scale=100 )}}">
+                </div>
+                <div class="col s9">
+                    <div class="row">
+                        <div class="col s12">
+                            <a href="#" class="waves-effect white-text edit-badges waves-light btn-flat"><i class="material-icons">edit</i></a>
+                            <h5 class="">Hi there, {{user.name | capitalize}}</h5>
+                        </div>                      
+                    </div>
+
+                    <div class="row">
+                        <span class="tags deep-orange ">
+                            Member Since : {{user.date_of_join.strftime("%d %B %Y")}}
+                        </span>
+                    </div>
+                </div>
+            </div>              
+        </div>
+    <!-- </div> -->
+
+    
+    <!-- Orders Card -->
+    <!-- <div class="col s12 m6 l4"> -->
+        <div class="card-panel hoverable teal lighten-1 white-text">
+              
+            <div class="row">
+                <div class="col s3">
+                    <i class="material-icons medium">shopping_basket</i>
+                </div>
+                <div class="col s9">  
+                    <h5 class="card-title">Your Orders</h5>
+                </div>
+            </div>
+
+            <div class="row" >
+                <div class="col card-text s12">
+                    <p>
+                        Tack, View and Manage your orders with real time updates.
+                    </p>
+                </div>
+            </div>
+        </div>
+    <!-- </div> -->
+
+     <!-- Saved Credit Card -->
+     <!-- <div class="col s12 m6 l4"> -->
+        <div class="card-panel hoverable teal lighten-1 white-text">
+              
+            <div class="row">
+                <div class="col s3">
+                    <i class="material-icons medium">credit_card</i>
+                </div>
+                <div class="col s9">  
+                    <h5 class="card-title">Saved Credit Cards</h5>
+                </div>
+            </div>
+
+            <div class="row card-text center-align" >
+               <p>Save your credit cards, and make your shopping experince with Nancy faster and safer</p> 
+            </div>
+        </div>
+    <!-- </div> -->
+
+    <!-- Saved Addresss  -->
+    <!-- <div class="col s12 m6 l4"> -->
+        <div class="card-panel hoverable teal lighten-1 white-text">
+              
+            <div class="row">
+                <div class="col s3">
+                    <i class="material-icons medium">home</i>
+                </div>
+                <div class="col s9 ">  
+                    <h5 class="yellow-text card-title">Saved Address </h5>
+                </div>
+            </div>
+
+            <div class="row card-text center-align" >
+               <p>Hating filling out forms, no worries we have got you covered save your home and offfice adresses saved to have them delivered to uoi instantly</p> 
+            </div>
+        </div>
+    <!-- </div> -->
+
+    <!-- Browse History  -->
+    <!-- <div class="col s12 m6 l4"> -->
+        <div class="card-panel hoverable teal lighten-1 white-text">
+              
+            <div class="row">
+                <div class="col s3">
+                    <i class="material-icons medium">history</i>
+                </div>
+                <div class="col s9 ">  
+                    <h5 class="yellow-text card-title">Products You Have Viewed</h5>
+                </div>
+            </div>
+
+            <div class="row card-text center-align" >
+               <p>
+                View and mange your browsing history<br>
+                Saw somethinng you liked while browsing, but it has slipped from the chasms of your mind dont worry we have got you covered.        
+            </p> 
+            </div>
+        </div>
+    <!-- </div> -->
+
+    
+
+
+</div>
+
+    
+{% endblock %}

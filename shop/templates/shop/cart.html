@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    h3 {
+        font-weight: 500;
+        margin-left: 5%;
+    }
+
+    .product-title {
+        font-weight: 500;
+        text-align: justify;
+        margin-top: 0;
+    }
+    .product-image{
+        height: 90%;
+    }
+    .btn {
+        margin-right: 10px;
+    }
+    .quantity-selector {
+        width: 30px;
+    }
+    
+    .select-wrapper{
+        width: 25%;
+        float: left;
+        margin-left: 5%;
+    }
+    .btn-large{
+        font-size: large;
+        font-weight: 700;
+    }
+    .btn-flat{
+        font-size: medium;
+        font-weight: 400;
+    }
+ 
+</style>
+
+<!-- Header -->
+<div class="row">
+    <div class="col s12">
+        <h3 class="teal-text">Shopping Cart</h3>
+    </div>
+</div>
+
+<!-- The cart itself  -->
+<div class="row">
+    <div class="col s12 m10 offset-m1 ">
+       <div class="card-panel", style="padding:0">
+           {% if cart | length != 0  %} 
+            <!-- Collapsible Collection -->
+            <ul class="collapsible" data-collapsible="">
+        
+                {% for product in cart %}
+
+                <li>
+                        <div class="collapsible-header white hoverable ">
+                            <div class="row" style="width: 100%; ">
+                                <div class="col  s3  m2 ">
+                                    <img class="responsive-img product-image" src="{{ url_for('media.images', root='productImages', scale=40, filename=product.images[0] ) }}">
+                                </div>
+                                <div class="col s9 m10">
+                                    <h3 class="product-title flow-text deep-orange-text truncate">{{product.name}}</h3>     
+                                    <span class="tags right deep-orange white-text " >Dhs {{ product.price }}</span> 
+                                    <!-- <span class="tags left teal white-text truncate  "> Quantity : {{product.quantity}}</span> -->
+                                        <!-- Item Quantity Selector  -->
+                                    <form method="POST">
+
+                                    <select id="quantity" name="quantity" onchange="document.getElementById('update_quantity_{{product.product_id}}').click()">
+                                        {% for i in range(product.available_quantity) %}
+                                        <option  value="{{i+1}}" {{'selected' if i == product.quantity-1 }}> {{i+1}}</option>
+                                        {% endfor %}
+                                        </select>
+                                        <label>Select you item quanitty</label>
+                                </div>
+                            </div>                    
+                        </div>
+                        <div class="collapsible-body white " style="padding-bottom:0;">
+                            <div class="row">
+                                
+                                    {{ form.hidden_tag() }}
+                                    {{ form.productID(value=product.product_id, class="hide") }}
+                                    <a class="btn btn-flat btn-small" href="{{url_for('shop.product', productID=product.product_id) }}">View Product</a>
+                                    {{form.update_quantity(class=" btn btn-flat btn-small hide waves-light ", id="update_quantity_"+product.product_id|string)}}
+                                    {{form.saved_for_later(class=" btn btn-flat btn-small  waves-light")}}
+                                    {{ form.delete_from_cart(class="btn btn-flat btn-small  waves-light")}}
+                                    
+                                </form>
+                            </div>
+                        </div>
+                    
+                </li>
+                {% endfor %}
+
+                <!-- Price -->
+                <li>
+                    <div class="collapsible-header">
+                        <div class="row"  style="width: 100%;">
+                            <div class="col s6">
+                                <h5 class="left teal-text">Total Price</h5> 
+                            </div>
+                            <div class="col s6">
+                                <h5 class="right  deep-orange-text">{{ total_bill }}</h5>
+                            </div>
+                            
+
+                        </div>
+                        
+                    </div>
+                    <div class="collapsible-body">
+                        {% for key, value in pricing.items() %}
+                        <h6> {{key}} : {{ value }}</h6>
+                        {% endfor %}
+                        </div>
+                        
+                    </div>
+                </li>
+
+
+            </ul>
+            {% else %}
+            <!-- No item in cart here  -->
+            <div class="row  center-align" style="height: 300px;">
+                
+                <i class="material-icons large deep-orange-text" style="margin-top:50px">looks</i><br>
+                <h3 class="teal-text">Nothing but a great empty here </h3> 
+                                
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+<!-- Checkout button -->
+<div class="row">
+    <div class="col s12  m6 offset-m3">
+        <a href="{{ url_for('shop.checkout') }}" style="width: 100%;" class="waves-effect  waves-light btn btn-large {{'disabled' if cart | length == 0  }} ">Checkout</a>
+    </div>
+</div>
+
+<br>
+
+<div class="divider"></div>
+
+<br>
+<!-- Saved for later header -->
+<div class="row">
+    <div class="col s12">
+        <h3 class="teal-text">Saved For Later</h3>
+    </div>
+</div>
+
+
+<!-- Saved for later -->
+<div class="row">
+    <div class="col s12 m10 offset-m1 ">
+       <div class="card-panel" style="padding:0">
+           {% if saved_for_later | length != 0  %} 
+            <!-- Collapsible Collection -->
+            <ul class="collapsible" data-collapsible="">
+        
+                {% for product in saved_for_later %}
+
+                <li>
+                    <div class="collapsible-header white hoverable " style="padding-bottom: 0;">
+                        <div class="row" style="width: 100%; ">
+                            <div class="col  s3 " style="padding: 0;">
+                                <img class="responsive-img product-image" src="{{ url_for('media.images', scale=80, root='productImages', filename=product.images[0] ) }}">
+                            </div>
+                            <div class="col s9 ">
+                                <h3 class="product-title flow-text deep-orange-text ">{{product.name}}</h3>     
+                                <span class="tags left deep-orange white-text " >Dhs {{ product.display_price }}</span> 
+                                <span class="tags left teal white-text truncate  "> Quantity : {{product.quantity}}</span>
+                            </div>
+                        </div>                    
+                    </div>
+                    <div class="collapsible-body white ">
+                        <div class="row">
+                            <form method="POST">
+                                {{ form.hidden_tag() }}
+                                {{ form.productID(value=product.product_id, class="hide") }}
+                                <a class="btn btn-flat btn-small" href="{{url_for('shop.product', productID=product.product_id) }}">View Product</a>
+                                {{form.move_to_cart(class=" btn btn-flat btn-small  waves-light")}}
+                                {{ form.delete_from_cart(class="btn btn-flat btn-small  waves-light")}}
+                                
+                            </form>
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+
+            </ul>
+            {% else %}
+            
+            <!-- No item in cart here  -->
+            <div class="row  center-align" style="height: 300px;">
+                
+                <i class="material-icons large deep-orange-text" style="margin-top:50px">looks</i><br>
+                <h3 class="teal-text">Nothing but a great empty here </h3> 
+                                
+            </div>
+            {% endif %}
+
+            
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+     document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems);
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems);
+  });
+
+</script>
+{% endblock %}

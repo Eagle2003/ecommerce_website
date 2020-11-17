@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+	body {
+        background-image: url('{{ url_for("static", filename="backgrounds/login.jpg")}}');
+        background-repeat: no-repeat;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover; 
+	}
+
+.carousel-item h3{
+    padding: 0px 10px 0px 10px;
+    margin-bottom: 5%;
+    font-size: 34px ;
+    font-weight: 500;
+    line-height: 40px;
+    color: teal;
+    text-align: center;
+  }
+
+  .carousel-item .content {
+    color: tomato;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .carousel-item .input-field{
+    margin: 5% 10% 5px 10%;
+    font-weight: 600;
+  }
+
+  .next-carousel-trigger {
+    margin-right: 10px;
+  }
+
+  .previous-carousel-trigger {
+    margin-left: 10px;
+  }
+
+  
+  .product-listing {
+    width: 100%;
+    height: 60%;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  #checkout-form{
+    height: 600px !important;
+    height: auto;
+  }
+
+  .tags {
+    padding: 2px 5px 3px 5px;
+    border-radius: 25px ;  
+    margin-right: 10px; 
+    margin-bottom: 5px;
+
+        }
+  
+
+</style>
+
+    <!--   Card -->
+    
+    <div class="row valign-wrapper" style="height: 90%;  ">
+        <div class="col  s12 m10 l6 offset-l3 offset-m1  ">
+          <div id="checkout-form" class="carousel carousel-slider ">
+            
+
+            <!-- The First Card  -->
+            <div class="carousel-item white " href="#one!">
+              <!-- The Hedaing -->
+              <div class="row" style="margin-bottom: 0;">
+                <div class="col s12">
+                  <h3>Please Review your items</h3>
+                </div>
+              </div> 
+
+              <!-- PRoducts List -->
+              <div class="row product-listing" >
+                <div class="col s12">
+                  <ul class="collection" style="width: 100%;">
+                    {% for product in cart %}
+                    <li class="collection-item">
+                      <div class="row" style="margin-bottom: 0;">
+                        <!-- image -->
+                        <div class="col s2 ">
+                        <img src="{{url_for('media.product_thumbnails', file=product.images[0]) }}" alt="" class="responsive-img">
+                        </div>
+                        <!-- title -->
+                        <div class="col s9 ">
+                          <span class="title deep-orange-text " style="font-weight: 500;">{{product.name}}</span>
+                          <!-- <span class="tags  deep-orange white-text "> Dhs {{ product.price}} </span> -->
+                          <p class="teal-text" style="margin:2px">Quantity : {{product.quantity}}</p>
+                        </div>
+                          <span class=" tags right deep-orange white-text secondary-content">Price : {{product.price}}</span>
+
+                      </div>
+                        <!-- <p>
+                            {{product.quantity}}                       
+                        </p> -->
+                    </li>
+                    {% endfor %}
+
+                  </ul>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col s12">
+                  <h5 class="teal-text" style="margin:10px; font-weight: 600;">Price : {{total_bill}}</h5>
+                </div>
+              </div>
+              <div class="row" >
+                <div class="col s6 left-align">
+                  <a href="{{ url_for('shop.cart') }}" class="waves-effect waves-light btn previous-carousel-trigger" > <i class="material-icons left">navigate_before</i>Cart </a>
+                </div>
+                <div class="col s6 right-align">
+                  <button class="btn waves-effect waves-light next-carousel-trigger"  onclick="nextCarousel()">
+                    Submit
+                    <i class="material-icons right">send</i>
+                  </button>
+                </div> 
+              </div>             
+            </div>
+          
+
+          
+
+
+            <!-- This is the second card -->
+            <div class="carousel-item white " href="#two!">
+              <h3>Now Some Legal Fromalities </h3>
+              <p class="white-text">This is your second panel</p>
+            </div>
+            
+          </div>
+        </div>
+    </div>
+   
+    <script>
+      let sellerAPI = "{{url_for('seller.sellerAPI')}}"
+      let preloader = document.getElementById('preloader-1')
+      let error = document.getElementById('seller-name-error')
+      var allowCarouselDrag = false
+      var elems = document.getElementById('checkout-form');
+      var form = M.Carousel.init(elems, {
+        fullWidth: true,
+        indicators: false,
+        noWrap : true,
+      });
+
+      function nextCarousel (){
+        form.next()
+      }
+
+    </script>
+
+
+{% endblock %}

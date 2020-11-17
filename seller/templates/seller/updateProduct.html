@@ -1,0 +1,526 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+	body {
+        background-image: url('{{ url_for("static", filename="backgrounds/login.jpg")}}');
+        background-repeat: no-repeat;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover; 
+	}
+
+
+.carousel-item {
+  padding: 20px
+}
+.carousel-item h3{
+    padding: 0px 10px 0px 10px;
+    margin-bottom: 5%;
+    font-size: 34px ;
+    font-weight: 500;
+    line-height: 40px;
+    color: teal;
+    text-align: center;
+  }
+
+  .carousel-item .content {
+    color: tomato;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .carousel-item .input-field{
+    margin: 5% 10% 5px 10%;
+    font-weight: 600;
+  }
+
+  .next-carousel-trigger {
+    margin-right: 10px;
+  }
+
+  .previous-carousel-trigger {
+    margin-left: 10px;
+  }
+
+  .category-panel {
+    background-color: teal;
+    transition: background-color 250ms linear;
+    color: white;
+    margin-left : 2px;
+    padding: 10px !important; 
+  }
+  .category-panel img {
+    border-radius: 10px;
+  }
+
+  .category-panel.active {
+    background-color: orangered;
+  }
+  
+  .product-tags{
+    color: white;
+    background-color: teal;
+    border-radius: 10px;
+    padding: 10px ;
+    transition: background-color 250ms linear;
+  }
+  
+  .product-tags.active{
+    background-color: orangered;
+  }
+
+  #checkout-form{
+    height: 600px !important;
+    height: auto;
+  }
+
+ .carousel-nav{
+   position: absolute;
+   bottom: 10;
+   width: 100%;
+ }
+
+ textarea{
+   max-height: 20%;
+   overflow-y: hidden !important;
+ }
+
+</style>
+
+<!--   Card -->
+
+<div class="row valign-wrapper" style="height: 80%; margin-top: 40px;  ">
+    <div class="col  s12 m10 l6 offset-l3 offset-m1  ">
+      <div id="checkout-form" class="carousel carousel-slider ">
+        <form id='product_form' method="POST" enctype="multipart/form-data">
+          {{ form.hidden_tag()}}
+        <!-- The First Card to Enter Product Name -->
+        <div class="carousel-item white " >
+          <!-- The Hedaing -->
+          
+          
+          <h3>EDIT PRODUCT</h3>
+            
+          <!-- Product Name -->
+          <div class="row center-align" >
+            <div class="col s12 m10 offset-m1" style="font-weight: 500; font-size: large;">
+              <h6 class="teal-text">
+               PRODUCT NAME <br>
+                (It is recommended not to change you product name often since it might to lead to condumer confusion)
+              </h6>
+              <br>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class=" s12 m10 input-field offset-m1">
+              {{ form.name(id='product_name', value=product.name) }}
+              {{ form.name.label(for="product_name")}}
+              <span id="product_name_error" class="input-error "></span>
+            </div>
+          </div>
+
+
+
+          <!-- Product Visiblity -->
+          <div class="row center-align" >
+            <div class="col s12 m10 offset-m1" style="font-weight: 500; font-size: large;">
+              <h6 class="teal-text">
+               PRODUCT VISIBLITY <br>
+                (If you're holding of on seeling this product then deactivate it to keep it hidden from users)
+              </h6>
+              <br>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class=" col s4 input-field offset-s4 switch">
+              <div class="switch">
+                <label>
+                  De-Activeated
+                  {% set active = True if product.active else False %}
+                  {{ form.active(id='product_active', checked=active) }}
+                  <span class="lever"></span>
+                  Activated
+                </label>
+              </div>
+            </div>
+          </div>
+
+                  
+          
+
+          
+          <!-- navigation -->
+          <div class="row carousel-nav"  style="">
+           
+            <div class="col s6 offset-s6 right-align">
+              <a class="btn waves-effect waves-light next-carousel-trigger"  onclick="validateCarousel(0)">
+                PRICING
+                <i class="material-icons right">navigate_next</i>
+              </a>
+            </div> 
+          </div>  
+
+        </div>
+
+        <!-- Pricing Information-->
+        <div class="carousel-item white " >
+          <!-- The Hedaing -->
+            <h3>PRODUCT PRICING </h3>
+          
+          <!-- Product list price -->
+            <div class="row">
+
+                <div class="col s12 center-align" style="font-weight: 500; font-size: large;">
+                    <h6 class="teal-text">
+                    PRODUCT LIST PRICE <br>
+                    This is the base price of your product and any discont is further applied on top of this.
+                    </h6>
+                </div>
+
+                <div class="col s12 m10 input-field offset-m1">
+                    {{ form.price(id='product_price', value=product.list_price) }}
+                    {{ form.price.label(for="product_price")}}
+                    <span id="product_price_error" class="input-error "></span>
+                </div>
+               
+            </div>
+            
+            <!-- Discount -->
+            <div class="row">
+                <div class="col s12 center-align" style="font-weight: 500; font-size: large;">
+                    <h6 class="teal-text">
+                    PRODUCT DISCOUNT <br>
+                    Discounts are the most entiicing property to potential buyers
+                    </h6>
+                </div>
+                
+                <div class="col s12 m10 input-field offset-m1">
+                    {{ form.discount(id='product_discount', value=product.discount) }}
+                    {{ form.discount.label(for="product_discount")}}
+                    <span id="product_discount_error" class="input-error "></span>
+                </div>
+            </div>
+
+          <!-- navigation -->
+          <div class="row carousel-nav" >
+            <div class="col s6 left-align">
+              <a onclick="prevCarousel()" class="waves-effect waves-light btn previous-carousel-trigger" > 
+                <i class="material-icons left">navigate_before</i>
+                back 
+              </a>
+            </div>
+            <div class="col s6  right-align">
+              <button type="button" class="btn waves-effect waves-light next-carousel-trigger"  onclick="validateCarousel(1)">
+                PRODUCT INVENTORY
+                <i class="material-icons right">navigate_next</i>
+              </button>
+            </div> 
+          </div>  
+
+        </div>
+
+
+         <!-- Pricing Information-->
+         <div class="carousel-item white " >
+            <!-- The Hedaing -->
+              <h3>INVENTORY INFORMATION</h3>
+            
+            <!-- Quantity  -->
+            <div class="row">
+                <div class="col s12 center-align" style="font-weight: 500; font-size: large;">
+                    <h6 class="teal-text">
+                    AVAILABLE QUANTITY <br>
+                    Updating youre inventory to you availble stock allows us to create a smart shopping experince for your consumers
+                    </h6>
+                </div>
+                
+                <div class="col s12 m10 input-field offset-m1">
+                    {{ form.quantity(id='product_quantity', value=product.discount) }}
+                    {{ form.quantity.label(for="product_quantity")}}
+                    <span id="product_quantity_error" class="input-error "></span>
+                </div>
+            </div>
+              
+            
+  
+            <!-- navigation -->
+            <div class="row carousel-nav" >
+              <div class="col s6 left-align">
+                <a onclick="prevCarousel()" class="waves-effect waves-light btn previous-carousel-trigger" > 
+                  <i class="material-icons left">navigate_before</i>
+                  back 
+                </a>
+              </div>
+              <div class="col s6  right-align">
+                <button type="button" class="btn waves-effect waves-light next-carousel-trigger"  onclick="validateCarousel(2)">
+                  PRODUCT INFORMATION
+                  <i class="material-icons right">navigate_next</i>
+                </button>
+              </div> 
+            </div>  
+  
+          </div>
+
+           <!-- To Add Basic Info  and description-->
+        <div class="carousel-item white " href="#one!">
+          <!-- The Hedaing -->
+          
+          <h3>PRODUCT INFORMATION</h3>
+              
+          
+          <!-- PRoduct Price -->
+          <div class="row" style="margin-bottom:0 ;">
+            <div class="  col s12 m10 offset-m1">
+              <h6 class="teal-text">A reliable and trustworthy manufacturer will create a relaible standard and trust for your store</h6>
+              <div class="input-field">
+                {{ form.manufacturer(id='product_manufacturer', type='text', value=product.manufacturer )}}
+                {{ form.manufacturer.label(for='product_manufacurer') }}
+                <span id='product_manufacturer_error' class="input-error"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Description -->
+          <div class="row">
+            <div class="  col s12 m10 offset-m1" >
+              <h6 class="teal-text">A good description is the key to better visbility and grown sales.  (20-200 words)</h6>
+              <div class="input-field">
+                {{ form.description(id='product_description', type='text', class="materialize-textarea", value=product.description)}}
+                {{ form.description.label(for='product_description') }}
+                <span id='product_description_error' class="input-error"></span>
+              </div>
+            </div>
+          </div>
+
+         
+            
+          <!-- navigation -->
+          <div class="row carousel-nav" >
+            <div class="col s6 left-align">
+              <a onclick="prevCarousel()" class="waves-effect waves-light btn previous-carousel-trigger" > 
+                <i class="material-icons left">navigate_before</i>
+                back 
+              </a>
+            </div>
+            <div class="col s6  right-align">
+              <button type="button" class="btn waves-effect waves-light next-carousel-trigger"  onclick="validateCarousel(3)">
+                PRODUCT IMAGES
+                <i class="material-icons right">navigate_next</i>
+              </button>
+            </div> 
+          </div>  
+
+        </div>
+
+        <!-- To add Images to the product-->
+        <div class="carousel-item white " href="#one!">
+          <!-- The Hedaing -->
+          
+          <h3>EDIT PRODUCT IMAGES</h3>
+              
+          
+          <!-- Image Selector -->
+
+          <div class=" row">
+            <div   style="position: relative;height: 40%;overflow-y: auto;" class="col s12 m10 offset-m1 grey waves-effect waves-light"  onclick="document.getElementById('product_images').click()">
+              <div id='picture-preview' class="row">
+                {% for image in product.images %}
+                <div class="col s6 m4 " style="">
+                    <div style="padding:5px" class='center-align card-panel teal'>
+                      <img style='z-index:1'  src="{{url_for('media.images', root='productImages', scale='80', filename=image)}}" class="responsive-img">
+                      <span class='center-align white-text'>Image</span>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <span>Maximum Of 5 Images Allowed  (Only .jpeg and .png files supported)</span>
+            <div class="col s2 offset-s5">
+              <div class="file-field input-field">
+                <div class="btn" style="border-radius: 25px;">
+                 <i class="material-icons large">upload</i>
+                  {{ form.images(id='product_images',  onchange='loadPreview(event)')}}
+                </div>
+                <span id='product_images_error' class="input-error"></span>
+                <div class=" hide file-path-wrapper">
+                  <input class="file-path validate" type="text" placeholder="Upload one or more files">
+                </div>
+              </div>
+            </div>
+          </div>
+
+         
+            
+          <!-- navigation -->
+          <div class="row carousel-nav" >
+            <div class="col s6 left-align">
+              <a  onclick="prevCarousel()" class="waves-effect waves-light btn previous-carousel-trigger" > 
+                <i class="material-icons left">navigate_before</i>
+                back 
+              </a>
+            </div>
+            <div class="col s6  right-align">
+            <button type="button"class="btn waves-effect waves-light next-carousel-trigger"  onclick="validateCarousel(4)">
+                SUBMIT
+                <i class="material-icons right">send</i>
+              </button>
+            </div> 
+          </div>  
+
+        </div>
+       
+      
+
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+<script src="{{ url_for('static', filename='js/validator.js') }}"></script>
+
+<!-- Lots of intializiation and checking -->
+<script>
+  
+  var queryDict = {}
+  location.search.substr(1).split("&").forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]})
+  var allowCarouselDrag = false
+  console.log(queryDict['address'])
+  if (queryDict['address']) document.getElementById('address').value = queryDict['address']
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Init the carousel
+    var elems = document.getElementById('checkout-form');
+    var form = M.Carousel.init(elems, {
+      fullWidth: true,
+      indicators: false,
+      noWrap : true,
+      duration : 100
+    });
+    slide = queryDict['slide']
+    form.set(slide)
+    var elems = document.querySelectorAll('.has-character-counter');
+    M.CharacterCounter.init(elems);
+  });
+
+//   Set Up description
+  document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('product_description').value={{product.description | tojson}}
+      M.textareaAutoResize(document.getElementById('product_description'));
+
+  });
+
+  // handy functions to nvaigate the carousel
+  function nextCarousel (){
+    var form = M.Carousel.getInstance( document.getElementById('checkout-form'));
+    form.next()
+    console.log('vc')
+  }
+
+  function prevCarousel (){
+    var form = M.Carousel.getInstance( document.getElementById('checkout-form'));
+    form.prev()
+  }
+  
+  function setcarousel(index) {
+    var form = M.Carousel.getInstance( document.getElementById('checkout-form'));
+    form.set(index)
+  }
+
+  function setValue(value, type, id_getter) {
+    elems = document.getElementsByClassName(type)
+    for (var i = 0; i < elems.length; i++) elems[i].classList.remove('active')
+    document.getElementById(id_getter).classList.add('active')
+    document.getElementById(type).value = value
+    M.updateTextFields();
+  }
+
+
+  function loadPreview(event) {
+    var output = document.getElementById('picture-preview');
+    output.innerHTML = ''
+    for (var i=0; i<event.target.files.length; i++){
+      output.innerHTML += `
+              <div class="col s6 m4 " style="">
+                <div style="padding:5px" class='center-align card-panel teal'>
+                  <img style='z-index:1' src='${URL.createObjectURL(event.target.files[i])}' class="responsive-img">
+                  <span class='center-align white-text'>Image ${i+1}</span>
+                </div>
+              </div>
+            `
+    }
+    // output.src = URL.createObjectURL(event.target.files[0]);
+    // output.onload = function() {
+    //   URL.revokeObjectURL(output.src) // free memory
+    // }
+  }
+
+  
+  const slides = {
+    0 : {fields : {
+      "product_name" : [data_required],
+      "product_active" : []
+      }},
+    1 : {fields : {
+        "product_price" :  [data_required, float_between(min=1)],
+        "product_discount" : [data_required, float_between(min=0, max=99)]
+    }},
+    2: {fields : {
+        "product_quantity" : [data_required, integer_between(min=0)]
+    }},
+    3 : {fields : {
+        "product_manufacturer" : [data_required],
+        "product_description" : [data_required, length_required(min=20, max=200)]
+    }},
+    4: {
+      fields : {"product_images" : [ valid_file_type([ 'image/jpeg', 'image/png']), number_of_files(min=1, max=5)]},
+      execute : () => {
+        document.getElementById('product_form').submit()
+        console.log('submitting')
+      }
+    }
+  }
+  
+
+
+  function validateCarousel(index) {
+    let flag  = true
+    for (var i=0; i<=index; i++){
+      let slide = slides[i]
+      if (!validateForm(slide['fields'])) {
+          setcarousel(i)
+          M.toast({html:"Please review the Form, it has errors"})
+          flag = false
+          break
+      }
+    }
+    console.log(slides[index])
+    if (slides[index].execute && flag) slides[index].execute()
+    if (flag) nextCarousel()
+  } 
+
+ 
+
+</script>
+
+
+
+
+
+    
+
+
+{% endblock %}

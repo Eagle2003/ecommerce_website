@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+ ul.tabs li.tab  a {
+     color: tomato !important;
+ }
+ .tabs .indicator{
+     color: tomato !important;
+     background-color: tomato !important;
+ }
+ 
+ .tabs {
+     font-weight: 700;
+ }
+</style>
+
+{% include 'seller/profile.html' %}
+
+
+<!-- Header -->
+<div class="row">
+    <div class="col s12 ">
+        <h3 class="teal-text ">Your Store Products</h3>
+    </div>
+</div>
+
+<div class="row">
+
+    {% include 'filters.html' %}
+
+    <!-- Active Products -->
+    <div class="col s12 l9 ">
+        <div class="card-panel", style="padding:0">
+            {% if products | length != 0  %} 
+                <!-- Collapsible Collection -->
+                <ul id="product-collapsible" class="collapsible" data-collapsible="">
+            
+                    {% for product in products %}
+
+                    <li class="{{ 'active' if active ==  product.id }}">
+                            <div class="collapsible-header white hoverable ">
+                                <div class="row" style="width: 100%; ">
+                                    <div class="col  s3  m2 ">
+                                        <img class="responsive-img product-image" src="{{ url_for('media.images', root='productImages', scale=40, filename=product.images[0] ) }}">
+                                    </div>
+                                    <div class="col s9 m10">
+                                        <h3 class="product-title flow-text deep-orange-text truncate">{{product.name}}</h3>                                                                        
+
+                                    </div>
+                                </div>                    
+                            </div>
+                            <div class="collapsible-body white " style="padding-bottom:0;">
+                                <h5>Product Information</h5>
+                                <br>
+                                <div class="row">
+                                    <div class=" col s12 m6 ">
+                                        <div class="card-panel fixed-input teal white-text">
+                                            <h5 class="yellow-text " style="margin-top: 0;">Description</h5>
+                                            {{product.description}}
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p class="tags white-text left ">Product List Price : {{product.list_price}}</p>
+                                        <p class="tags white-text left">Product Selling Price : {{product.display_price}}</p>
+                                        <p class="tags white-text left">Product Display Price : {{product.display_price}}</p>
+                                        <p class="tags white-text left">Applied Discount  : {{product.discount}}</p>
+                                        <p class="tags white-text left">Availble Inventory : {{product.quantity}}</p>
+                                        <p class="tags white-text left">Manufacturer : {{product.manufacturer}}</p>
+                                        <p class="tags white-text left">Visibiloty : {{'Active' if product.active else 'Disabled' }}</p>
+
+                                        
+                                    </div>
+                            </div>
+                            <a href="{{url_for('shop.product', productID=product.id)}}" class="waves-effect waves-light btn btn-flat">Visit Product Page</a>
+                            <a href="{{url_for('seller.updateProduct', productID=product.id)}}" class="waves-effect waves-light btn btn-flat">Edit Product Infomration</a>
+                            
+
+                        
+                    </li>
+                    {% endfor %}
+
+
+                </ul>
+                {% else %}
+                <!-- No product being sold  -->
+                <div class="row  center-align" style="height: 300px;">
+                    
+                    <i class="material-icons large deep-orange-text" style="margin-top:50px">looks</i><br>
+                    <h3 class="teal-text">Nothing but a great empty here </h3> 
+                                    
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+        
+
+   
+</div>
+
+{% include 'pagenation.html' %}
+
+
+<!-- Add Product button -->
+<div class="row">
+    <div class="col s12  m6 offset-m3">
+        <a href="{{ url_for('seller.addProduct') }}" style="width: 100%;" class="waves-effect  waves-light btn btn-large ">ADD PRODUCT</a>
+    </div>
+</div>
+
+<br>
+
+<br>
+
+
+
+
+<script src="{{ url_for('static', filename='js/validator.js') }}"></script>
+
+<script>
+     document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems);
+    let el = document.getElementById('tabs')
+    var instance = M.Tabs.init(el);
+  });
+  
+  
+</script>
+
+{% endblock %}

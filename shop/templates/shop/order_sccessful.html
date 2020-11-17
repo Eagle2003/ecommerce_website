@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+    
+<style>
+	body {
+        background-image: url('{{ url_for("static", filename="backgrounds/login.jpg")}}');
+        background-repeat: no-repeat;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover; 
+	}
+    .title {
+        font-weight: 600;
+    }
+    .input-field {
+        font-weight: 600;
+    }
+    h6 {
+        font-weight: 600;
+    }
+    span{
+        font-weight: 500;
+    }
+</style>
+    <!-- Register Card -->
+    
+    <div class="row valign-wrapper" style="min-height: 85%;">
+        <div class="col  s12 m8 l6 offset-l3 offset-m2  ">
+            <div class="card-panel   white">
+                    <h4 class=" title center-align  deep-orange-text" >Order Successfull</h4>
+                    <br>
+                    <ul class="collection">
+                        {% for order in orders %}
+
+                        <li class="collection-item" style="padding: 2px;">
+                            <div class="row" style="margin: 0;">
+                                <div class="col s4 m2 ">
+                                    <img class="responsive-img" src="{{ url_for('media.images', root='productImages', scale=20, filename=order.images[0]) }}">
+                                </div>
+                                <div class="col s8 m10 teal-text">
+                                    <h6 class="teal-text truncate">{{order.name}}</h6>
+                                    <p class=" deep-orange-text">Order id :  #{{order.id}}</p><br>
+                                    <div class="row">
+                                        <span class="tags white-text deep-orange">Cost : {{order.sale_price}}</span>
+                                        <span class="tags white-text">Qty : {{order.quantity}}</span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </li>
+
+                        
+                        
+                        {% endfor %}
+                    </ul>
+
+                    <div class="row">
+                        <div class="col s12 m4 l3 offset-m8 offset-l9 ">
+                            <a href="{{url_for('user.orders')}}" class="waves-effect right waves-teal btn-flat">My Orders</a>
+                        </div>
+                    </div>
+                    
+
+            </div>
+        </div>
+    </div>
+   
+
+    
+
+{% endblock %}

@@ -1,0 +1,21 @@
+
+
+<style>
+  ul.pagination li.active{
+    background-color: teal;
+  }
+</style>
+<div class="row center-align center">
+
+  <ul class="pagination">
+    <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+    {% for i in range(pages) %}
+    {% set args = dict(request.args) %}
+    {% set _x = args.update({'page':i}) %}
+    <li class="{{'active' if i == current_page else 'waves-effect'}}"><a href="{{url_for(request.endpoint, **args)}}">{{i+1}}</a></li>
+    {% endfor %}
+    <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+  </ul>
+
+</div>
+  

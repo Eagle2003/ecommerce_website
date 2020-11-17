@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .edit-badges{
+        position: relative;
+        bottom: 10;
+        left: 20;
+        border-radius: 25px;
+        padding: 5px 10px 5px 10px;
+        float: right;
+        margin-right: 5%;
+    }
+    .card-panel {
+        height: 225px;
+    }
+    .card-title{
+        font-weight: 600;
+        color: #ffeb3b;       
+    }
+    .card-text{
+        text-align : center;
+        font-weight: 500;
+        font-size: medium;
+    }
+    @media only  screen  and (max-width: 600px){
+        .card-panel{
+            height: auto;
+        }        
+    }
+</style>
+
+<!-- HEading -->
+<div class="row">
+    <div class="col s12 ">
+        <h3 class="deep-orange-text" style="margin-left: 5%;">
+            Dashboard
+        </h3>
+    </div>
+</div>
+
+<!-- Cards with links to other user pages -->
+<div class="row" style="margin: 10px;">
+    <!-- User Card -->
+    <div class="col s12 m6 l4">
+        <div onclick="" class="card-panel hoverable teal lighten-1 white-text">
+            <div class="row" >
+                <div class="col s3">
+                    <div class="aspect-ratio-box">
+                        <img class=" circle responsive-img " src="{{url_for('media.user_profile', scale=100) }}?id={{session.PROFILE_PICTURE}}">
+                    </div>
+                </div>
+                <div class="col s9">
+                    <a href="#" data-target="update_profile" class="waves-effect white-text edit-badges  waves-light modal-trigger btn-flat"><i class="material-icons medium">edit</i></a>
+                    <h5 class="card-title">Hi there, {{user.name  | capitalize}}</h5>
+                </div>
+            </div>       
+            <div class="row">
+                <p class="tags deep-orange ">
+                    Member Since : {{user.date_of_join.strftime("%d %B %Y")}}
+                </p>
+                <p class="tags deep-orange ">
+                    Savings with NANCY : Dhs {{orders_stats.saved}}
+                </p>
+            </div>       
+        </div>
+    </div>
+
+    
+    <!-- Orders Card -->
+    <div class="col s12 m6 l4">
+        <a href="{{url_for('user.orders')}}" style="display: block;">
+        <div class="card-panel hoverable teal waves-effect waves-light lighten-1 white-text">
+              
+            <div class="row">
+                <div class="col s3">
+                    <i class="material-icons medium">shopping_basket</i>
+                </div>
+                <div class="col s9">  
+                    <h5 class="card-title">Your Orders</h5>
+                </div>
+            </div>
+
+            <div class="row" >
+                <div class="col card-text s12">
+                    <p>
+                        Impateintly awating your order ? Dont worry you can teack your order in real time wiht NANCY 
+                    </p>
+                </div>
+            </div>
+        </div>
+        </a>
+    </div>
+
+     <!-- Saved Credit Card -->
+     <div class="col s12 m6 l4">
+         <a href="{{url_for('user.cards')}}" style="display: block;">
+        <div class="card-panel waves-effect waves-light hoverable teal lighten-1 white-text">
+              
+            <div class="row">
+                <div class="col s3">
+                    <i class="material-icons medium">credit_card</i>
+                </div>
+                <div class="col s9">  
+                    <h5 class="card-title">Saved Credit Cards</h5>
+                </div>
+            </div>
+
+            <div class="row card-text center-align" >
+               <p>
+                   Save your frequently used payment methods to enhance your shopping experince and make it simple fast and secure
+               </p> 
+            </div>
+        </div>
+        </a>
+    </div>
+
+    <!-- Saved Addresss  -->
+    <div class="col s12 m6 l4">
+        <a href="{{url_for('user.address')}}" style="display: block;">
+            <div class="card-panel hoverable waves-effect waves-light teal lighten-1 white-text">
+                
+                <div class="row">
+                    <div class="col s3">
+                        <i class="material-icons medium">home</i>
+                    </div>
+                    <div class="col s9 ">  
+                        <h5 class="yellow-text card-title">Saved Address </h5>
+                    </div>
+                </div>
+
+                <div class="row card-text center-align" >
+                <p>
+                        Hating filling out forms, no worries we have got you covered. Save your home and offfice adresses to have your orders delivered to you faster
+                    </p> 
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Browse History  -->
+    <div class="col s12 m6 l4">
+        <a href="{{url_for('user.history')}}" style="display: block;">
+        <div class="card-panel waves-effect waves-light hoverable teal lighten-1 white-text">
+              
+            <div class="row">
+                <div class="col s3">
+                    <i class="material-icons medium">history</i>
+                </div>
+                <div class="col s9 ">  
+                    <h5 class="yellow-text card-title">Products You Have Viewed</h5>
+                </div>
+            </div>
+
+            <div class="row card-text center-align" >
+               <p>
+                Saw somethinng you liked while browsing, but it has slipped from the chasms of your mind dont worry we have got you covered.        
+            </p> 
+            </div>
+        </div>
+        </a>
+    </div>
+
+    <!-- BookMarked Products -->
+    <div class="col s12 m6 l4">
+        <a href="{{url_for('user.watchlist')}}" style="display: block;">
+        <div class="card-panel waves-light waves-effect hoverable teal lighten-1 white-text">
+              
+            <div class="row">
+                <div class="col s3">
+                    <i class="material-icons medium">bookmark_border</i>
+                </div>
+                <div class="col s9 ">  
+                    <h5 class="yellow-text card-title">Products Youre Watching</h5>
+                </div>
+            </div>
+
+            <div class="row card-text center-align" >
+               <p>
+                View your Bookmrked Products
+                <br>
+                Eyeing a product u desire ? Keep track of the product and track price changes by bookmarking them.
+                        
+            </p> 
+            </div>
+        </div>
+        </a>
+    </div>
+    <div id="hidden-away">
+
+    </div>
+
+    <script>
+        const update_profile_url = "{{url_for('user.dashboard')}}"
+        const crsf_token = '{{form.hidden_tag()}}'
+        const profile_picture_url = 
+        const first_name = "{{user.name}}"
+        const last_name = "{{user.last_name}}"
+    </script>
+    <script src="{{url_for('static', filename='js/validator.js')}}"></script>
+    {% include 'seller/updateProfile.html' %}
+
+</div>
+
+    
+{% endblock %}

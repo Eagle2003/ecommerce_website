@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .edit-badges{
+        position: absolute;
+        top :10;
+        right : 10;
+        border-radius: 25px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .card-panel {
+        height: 225px;
+    }
+    .card-title{
+        font-weight: 600;
+        color: #ffeb3b;       
+    }
+    .card-text{
+        text-align : center;
+        font-weight: 500;
+        font-size: medium;
+    }
+    @media only  screen  and (max-width: 600px){
+        .card-panel{
+            height: auto;
+        }        
+    }
+</style>
+
+{% include 'seller/profile.html' %}
+
+<!-- Cards with links to other user pages -->
+<div class="row" style="margin: 10px;">
+
+    <!-- Store ID Card -->
+    <div class="col s12 m6 l4">
+        <div style="position: relative;" onclick="" class="card-panel hoverable teal lighten-1 white-text">
+            <div class="row" >
+                <div class="col s3">
+                    <div class="aspect-ratio-box">
+                        <img class=" circle responsive-img " src="{{url_for('media.images', root='storeProfile', scale=100, filename=store.image) }}">
+                    </div>
+                </div>
+                <div  class="col s9">
+                    <a href="#" data-target="update_profile" class="waves-effect white-text edit-badges  waves-light modal-trigger btn-flat"><i class="material-icons medium">edit</i></a>
+                    <h5 class="card-title">{{store.name}}</h5>
+                </div>
+            </div>       
+            <div class="row">
+                <p class="tags deep-orange ">
+                    Selling On Nancy Since : {{store.date_of_join.strftime("%d %B %Y")}}
+                </p>
+                <p class="tags deep-orange ">
+                    Succesful Sales : 
+                </p>
+            </div>       
+        </div>
+    </div>
+
+    
+    <!-- Orders Card -->
+    <div class="col s12 m6 l4">
+        <a href="{{url_for('seller.orders')}}" style="display: block;">
+        <div class="card-panel hoverable teal waves-effect waves-light lighten-1 white-text">
+              
+            <div class="row">
+                <div class="col s3">
+                    <i class="material-icons medium">assignment</i>
+                </div>
+                <div class="col s9">  
+                    <h5 class="card-title">Orders</h5>
+                </div>
+            </div>
+
+            <div class="row" >
+                <div class="col card-text s12">
+                    <p>
+                        Your Customers are awaiting for your products. Go out and sell you products to the new world
+                    </p>
+                </div>
+            </div>
+        </div>
+        </a>
+    </div>
+
+    <!-- Store Front  
+    <div class="col s12 m6 l4">
+        <a href="{{url_for('user.address')}}" style="display: block;">
+            <div class="card-panel hoverable waves-effect waves-light teal lighten-1 white-text">
+                
+                <div class="row">
+                    <div class="col s3">
+                        <i class="material-icons medium">store</i>
+                    </div>
+                    <div class="col s9 ">  
+                        <h5 class="yellow-text card-title">Store Front</h5>
+                    </div>
+                </div>
+
+                <div class="row card-text center-align" >
+                <p>
+                    Stylize your store Front and display your products to attract portetntials buyers
+                    </p> 
+                </div>
+            </div>
+        </a>
+    </div>
+ -->
+
+     <!-- Your Products -->
+     <div class="col s12 m6 l4">
+         <a href="{{url_for('seller.products')}}" style="display: block;">
+        <div class="card-panel waves-effect waves-light hoverable teal lighten-1 white-text">
+              
+            <div class="row">
+                <div class="col s3">
+                    <i class="material-icons medium">view_comfy</i>
+                </div>
+                <div class="col s9">  
+                    <h5 class="card-title">Your Products</h5>
+                </div>
+            </div>
+
+            <div class="row card-text center-align" >
+               <p>
+                   Manage your products Nanc, expand your product protfolion on Nancy. Showcase your products to a larger audience
+               </p> 
+            </div>
+        </div>
+        </a>
+    </div>
+
+
+     <!-- Your Products -->
+     <div class="col s12 m6 l4">
+        <a href="{{url_for('seller.addProduct')}}" style="display: block;">
+       <div class="card-panel waves-effect waves-light hoverable teal lighten-1 white-text">
+             
+           <div class="row">
+               <div class="col s3">
+                   <i class="material-icons medium">add</i>
+               </div>
+               <div class="col s9">  
+                   <h5 class="card-title">Add A New Product</h5>
+               </div>
+           </div>
+
+           <div class="row card-text center-align" >
+              <p>
+                  Add A New product To Your Inventory. Expand Youre Store Easily with Nancys interactive and easy to use add prodcuct form
+              </p> 
+           </div>
+       </div>
+       </a>
+   </div>
+
+    
+
+   
+
+
+
+</div>
+
+{% include 'seller/updateSeller.html' %}
+    
+{% endblock %}

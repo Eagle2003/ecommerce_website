@@ -1,0 +1,109 @@
+
+/* overrifign the defaults */
+
+h3{
+    font-weight: 600;
+}
+h4{
+    font-weight: 500;
+}
+h6{
+    font-weight: 500;
+}
+h5{
+    font-weight: 500;
+}
+
+span {
+    font-weight: 500;
+}
+/* Scroll barr */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+
+/* Updating materializes css */
+
+.input-field{
+    font-weight: 500;
+}
+.card .card-title{
+    font-weight: 400;
+    font-size: 30px;
+}
+.card-panel{
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.collapsible-header {
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.btn.btn-bold{
+    font-weight: 500;
+    font-size: large;
+}
+
+/* What i have defined  */
+
+.tags {
+    display: block;
+    padding: 5px 10px 5px 10px;
+    border-radius: 25px ;
+    margin-top: 2px;  
+    margin-right: 10px; 
+    background-color: teal;
+    width: fit-content;
+    font-weight: 500;
+}
+.responsive-img-height {
+    height: 100%;
+    width: auto;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.input-error{
+    color: red;
+}
+
+/* Position child elements relative to this element */
+.aspect-ratio-box {
+    position: relative;
+}
+
+/* Create a pseudo element that uses padding-bottom to take up space */
+.aspect-ratio-box::after {
+    display: block;
+    content: '';
+    /* 16:9 aspect ratio */
+    padding-bottom: 100%;
+}
+
+/* Image is positioned absolutely relative to the parent element */
+.aspect-ratio-box img {
+    /* Image should match parent box size */
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
