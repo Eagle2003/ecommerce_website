@@ -12,7 +12,7 @@ class Config (object) :
     MYSQL_DATABASE = 'nancy'
     MYSQL_PASSWORD = 'tony2003'
     MYSQL_DATABASE	= 'nancy'
-
+    
     # Falsk-mail Configs 
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 465
