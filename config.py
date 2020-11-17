@@ -8,9 +8,10 @@ class Config (object) :
     MAX_CONTENT_LENGTHs = 4 * 1024 * 1024 #4mb max file size
 
     # MySQL CONfigurations
-    MYSQL_USER = 'rot'
+    MYSQL_USER = 'root'
     MYSQL_DATABASE = 'nancy'
-    MYSQL_PASSWORD = ''nancy'
+    MYSQL_PASSWORD = 'cuckoo'
+    MYSQL_DATABASE	= 'nancy'
 
     # Falsk-mail Configs 
     MAIL_SERVER = 'smtp.gmail.com'
