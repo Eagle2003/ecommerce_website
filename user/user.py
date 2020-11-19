@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, url_for, request, redirect, url_for, abort, flash, session, current_app
 from datetime import date
+from hashlib import sha224
 import json
 import uuid
 import os
@@ -8,7 +9,7 @@ from nancy.sqlORM import Query
 from nancy.auth.decrators import login_required
 from nancy.sqlORM import Query
 from nancy.diskIO import saveFormDataToDisk, deleteFromDisk
-from .forms import addressForm, creditCardForm, profileForm, manageOrdersForm
+from .forms import addressForm, creditCardForm, profileForm, manageOrdersForm, ResetPassword
 
 
 
@@ -46,6 +47,23 @@ def dashboard ():
         
 
     return render_template("user/dashboard.html", user=user, orders_stats=orders_stats, form=form)
+
+@user_bp.route('reset_password', methods=["POST", "GET"])
+@login_required
+def reset_password() :
+    form = ResetPassword()
+    if form.validate_on_submit() : 
+        password = sha224(form.old_password.data.encode()).hexdigest()
+        print(password)
+        if Query("users").get(['password']).filter(email=session['EMAIL']).fetchone()['password'] == password:
+            password = sha224(form.password.data.encode()).hexdigest()
+            Query("users").update(password=password).filter(email=session['EMAIL']).execute().commit()
+            flash("Pssword Has Been Updated !")
+            return redirect(url_for('user.dashboard'))
+        else : 
+            form.old_password.errors += ["Invlaid Password !"]
+    
+    return render_template("user/reset_password.html", form=form)
 
 @user_bp.route('address', methods=["POST", "GET"])
 @login_required

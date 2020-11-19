@@ -10,14 +10,14 @@ class Config (object) :
     # MySQL CONfigurations
     MYSQL_USER = 'root'
     MYSQL_DATABASE = 'nancy'
-    MYSQL_PASSWORD = 'cuckoo'
+    MYSQL_PASSWORD = 'tony2003'
     MYSQL_DATABASE	= 'nancy'
 
     # Falsk-mail Configs 
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 465
     MAIL_USERNAME = 'romeyp20@gmail.com'
-    MAIL_PASSWORD = 'cuckoo'
+    MAIL_PASSWORD = 'tony2003'
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
 

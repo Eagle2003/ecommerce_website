@@ -161,7 +161,32 @@
         </a>
     </div>
 
-    <!-- BookMarked Products -->
+     <!-- Forgot  Password -->
+     <div class="col s12 m6 l4">
+        <a href="{{url_for('user.reset_password')}}" style="display: block;">
+        <div class="card-panel waves-light waves-effect hoverable teal lighten-1 white-text">
+              
+            <div class="row">
+                <div class="col s3">
+                    <i class="material-icons medium">vpn_key</i>
+                </div>
+                <div class="col s9 ">  
+                    <h5 class="yellow-text card-title">Reset Your Password </h5>
+                </div>
+            </div>
+
+            <div class="row card-text center-align" >
+               <p>
+                   Update your password and keep your account secured
+                <br>
+                Updatting your password regulalrly is a well recommende practices to keep your account and personal infromation safe.                        
+            </p> 
+            </div>
+        </div>
+        </a>
+    </div>
+
+    <!-- BookMarked Products
     <div class="col s12 m6 l4">
         <a href="{{url_for('user.watchlist')}}" style="display: block;">
         <div class="card-panel waves-light waves-effect hoverable teal lighten-1 white-text">
@@ -185,18 +210,11 @@
             </div>
         </div>
         </a>
-    </div>
+    </div> -->
     <div id="hidden-away">
 
     </div>
 
-    <script>
-        const update_profile_url = "{{url_for('user.dashboard')}}"
-        const crsf_token = '{{form.hidden_tag()}}'
-        const profile_picture_url = 
-        const first_name = "{{user.name}}"
-        const last_name = "{{user.last_name}}"
-    </script>
     <script src="{{url_for('static', filename='js/validator.js')}}"></script>
     {% include 'seller/updateProfile.html' %}
 

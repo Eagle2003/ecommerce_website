@@ -1,8 +1,8 @@
 from flask import flash, session
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SubmitField
+from wtforms import StringField, IntegerField, SubmitField, PasswordField
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-from wtforms.validators import DataRequired, Length, AnyOf, ValidationError
+from wtforms.validators import DataRequired, Length, AnyOf, ValidationError, EqualTo
 from nancy.sqlORM import Query
 from datetime import date
 
@@ -56,3 +56,9 @@ class manageOrdersForm(FlaskForm):
     orderID = IntegerField("order-id", validators=[DataRequired(),isValidOrderID])
     cancelOrder = SubmitField("CANCEL ORDER")
     returnORder = SubmitField("RETURN ORDER")
+
+class ResetPassword(FlaskForm):
+    old_password = password = PasswordField('Old Password', validators=[DataRequired()])
+    password = PasswordField('New Password', validators=[DataRequired(), EqualTo('confirm', message='Passwords must match')])
+    confirm = PasswordField("Repeat Password", validators=[DataRequired()])
+    
