@@ -11,7 +11,8 @@
 
 <!-- The cart itself  -->
 <div class="row">
-    <div class="col s12 m10 offset-m1 ">
+    {% include 'filters.html' %}
+    <div class="col s12 l9 ">
        <div class="card-panel", style="padding:0">
            {% if orders | length != 0  %} 
             <!-- Collapsible Collection -->
@@ -76,6 +77,8 @@
         </div>
     </div>
 </div>
+
+{% include 'pagenation.html' %}
 
 
 <script>

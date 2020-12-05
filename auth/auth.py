@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 
 auth_bp = Blueprint(
     'auth',
-     __name__,
+    __name__,
     template_folder='templates',
     static_folder='static')
 
@@ -41,7 +41,7 @@ def login():
 
         if not user  :
             form.email.errors = ["Sorry we couldnt find a account linked to your id"]
-         
+        
         elif not user['password'] == sha224(form.password.data.encode('UTF-8')).hexdigest() :
             form.password.errors = ["The password is not valid for the give email"]
         
@@ -85,7 +85,7 @@ def register():
     
         token = form.email.data + token_urlsafe(32)
         Query('activation').insert(activation_code = token, email = form.email.data).commit()
-     
+    
         #Initiate a messages to user to activate account
         sendActivationMail(form.email.data, token)
         flash("You're Sign Up is Successful. Please activate your account from the link sent to your mail.")

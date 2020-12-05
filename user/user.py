@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, url_for, request, redirect, url_for, abort, flash, session, current_app
-from datetime import date
+from datetime import date, timedelta
 from hashlib import sha224
 import json
 import uuid
@@ -123,12 +123,27 @@ def cards():
 @user_bp.route('orders', methods=["POST", "GET"])
 @login_required
 def orders():
+    # Get parameters
+    state = request.args.get("Order State")
+    category = request.args.get("Category")
+    subcategory = request.args.get("SubCategory")
+    item= request.args.get("item")
+    page = request.args.get('page')
+    page = int(page) if page and page.isdigit() else 0
+    limit = 10
     
     form = manageOrdersForm()
     columns = ["id", "product_id", "quantity", "state", "date_of_return", "date_of_completion",  "sale_price", "date_of_issue", "status"]
-    orders = Query('orders').get(columns=columns).filter(buyer=session['EMAIL']).sort("date_of_issue",order="DESC")
+    order = Query('orders', multiple=True).get(columns=columns, limit=limit, offset=page*limit, found_rows=True).filter(buyer=session['EMAIL']).sort("date_of_issue",order="DESC")
     product = Query('products').get(columns=['images', 'name'])
-    orders = orders.join(product, "orders.product_id = products.id").fetchall(images=json.loads)
+    if category : product.filter(category=category)
+    if subcategory : product.filter(subcategory=subcategory)
+    if item : product.filter(item=item)
+    if state == 'Completed'  : order.filter(state__in=[4, -1, -2, -4])
+    elif state == 'Proccesing'  : order.filter(state__not_in=[4, -1, -2, -4])
+    orders = order.join(product, "orders.product_id = products.id").fetchall(images=json.loads)
+    pages = order.found_rows//10 +1
+
 
 
     if form.validate_on_submit() : 
@@ -141,9 +156,19 @@ def orders():
             Query('orders').update(state=-3, status="User has Requested For the Item to be returned", date_of_return__exp='current_timestamp').filter(buyer=session['EMAIL']).filter(id=form.orderID.data).execute().commit()
             flash('Order Return Requested')
         return redirect(url_for('user.orders'))
-
     
-    return render_template("user/orders.html", orders=orders, form=form)
+    order = Query("orders").get().filter(buyer=session['EMAIL'])
+    filters= {
+       "options" : {
+            'Order State' : ["Completed", "Proccesing"],
+            'Category' :  Query("products", dictionary=False).get(columns=["category"]).join(order, "orders.product_id = products.id", distinct=True).fetchall(flatten=True),
+            'SubCategory' :  Query("products", dictionary=False).get(columns=["subcategory"]).join(order, "orders.product_id = products.id", distinct=True).fetchall(flatten=True),
+            "item" :   Query("products", dictionary=False).get(columns=["item"]).join(order, "orders.product_id = products.id", distinct=True).fetchall(flatten=True),
+            "time" : [("Last Week","lw"), ("Last Month","lm"), "LAst 6 Months", "Older"],
+       },
+    }
+    
+    return render_template("user/orders.html", orders=orders, form=form, filters=filters, pages=pages, current_page=page)
 
 @user_bp.route('history', methods=["POST", "GET"])
 @login_required

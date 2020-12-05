@@ -19,7 +19,7 @@
                 <select id="{{filter}}" name="{{filter}}">
                 <option   value="" disabled selected>Select A {{filter}}</option>
                 {% for elem in elems%}
-                <option id="{{elem}}" value="{{elem}}">{{elem}}</option>
+                <option id="{{elem}}" value="{{elem[1] if elem is iterable and elem is not string  else elem }}">{{elem}}</option>
                 {% endfor %}
                 </select>
                 <label>{{filter}}</label>

@@ -17,7 +17,7 @@ class Config (object) :
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 465
     MAIL_USERNAME = 'romeyp20@gmail.com'
-    MAIL_PASSWORD = 'tony2003'
+    MAIL_PASSWORD = 'EKUJQ5aDfPKrQmg9QOP4'
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
 

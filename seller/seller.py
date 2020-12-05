@@ -202,7 +202,7 @@ def orders():
     
     # The Order Query
     columns = ["id", "buyer", "status", "date_of_completion", "date_of_return", "sale_price", "date_of_issue"]
-    order = Query('orders', multiple=True).get(columns=columns, limit=limit, offset=page*limit).filter(seller=session['SELLER_NAME']).sort(column='date_of_issue')
+    order = Query('orders', multiple=True).get(columns=columns, limit=limit, offset=page*limit, found_rows=True).filter(seller=session['SELLER_NAME']).sort(column='date_of_issue')
     # The Product Query
     columns = [("id", "product_id"), "name", "images", "category", "subcategory", "item"]
     product = Query("products").get(columns=columns)
@@ -219,8 +219,8 @@ def orders():
 
     #The Join
     orders = order.join(product, "products.id = orders.product_id").join(address, "addresses.id = orders.address_id").fetchall(images=json.loads)
-    pages = (order.get(columns='count(*) as count').fetchone()['count']//limit)+1
-
+    pages = order.found_rows//10 + 1
+    
     #Get the disitncts
     order = Query("orders").get().filter(seller=session['SELLER_NAME'])
     filters= {

@@ -1,5 +1,6 @@
 from flask_mysql_connector import MySQL
 from flask import current_app
+from datetime import timedelta
 
 mysql = MySQL(current_app)
 
@@ -19,18 +20,20 @@ class Query () :
         self.lastInsertId = None
         self.RESULT = None
         self.multiple = multiple
+        self.found_rows = None
     
-    def get(self, columns='*', limit=None, offset=None, distinct=False ) : 
+    def get(self, columns='*', limit=None, offset=None, distinct=False, found_rows=False) : 
         if not type(columns) == str : 
             for column in columns :
                 if type(column) == str : self.QUERY["COLUMNS"] += [f" {self.TABLE}.{column}"]
                 elif type(column) == list : self.QUERY["COLUMNS"] += [f" {column[0]} "]
                 elif type(column) == tuple : self.QUERY["COLUMNS"] += [f" {self.TABLE}.{column[0]} AS {column[1]} "]
-            self.QUERY["BASE"] = f"SELECT {'DISTINCT' if distinct else ''} {', '.join(self.QUERY['COLUMNS'])} FROM {self.TABLE} "
+            self.QUERY["BASE"] = f"SELECT {'SQL_CALC_FOUND_ROWS' if found_rows else '' } {'DISTINCT' if distinct else ''} {', '.join(self.QUERY['COLUMNS'])} FROM {self.TABLE} "
         else :
-            self.QUERY["BASE"] = f"SELECT {'DISTINCT' if distinct else ''} {columns} FROM {self.TABLE} "
+            self.QUERY["BASE"] = f"SELECT {'SQL_CALC_FOUND_ROWS' if found_rows else '' } {'DISTINCT' if distinct else ''} {columns} FROM {self.TABLE} "
         self.QUERY["LIMIT"] = limit
         self.QUERY["OFFSET"] = offset
+        self.found_rows = found_rows
         return self
     
     def insert(self, **kwargs) :
@@ -94,7 +97,7 @@ class Query () :
         self.QUERY['FILTER'] += joinQuery.QUERY['FILTER']
         self.QUERY['INNER JOIN'] += [(joinQuery.TABLE, condition)]
         join_lst = [f" INNER JOIN {j[0]} ON {j[1]} " for j  in self.QUERY['INNER JOIN'] ]
-        self.QUERY["BASE"] = f"SELECT  {'DISTINCT' if distinct else ''} {', '.join(self.QUERY['COLUMNS'])} FROM {self.TABLE}  {''.join(join_lst)}"
+        self.QUERY["BASE"] = f"SELECT  {'SQL_CALC_FOUND_ROWS' if self.found_rows else '' } {'DISTINCT' if distinct else ''} {', '.join(self.QUERY['COLUMNS'])} FROM {self.TABLE}  {''.join(join_lst)}"
         joinQuery.cursor.close()
         return self   
 
@@ -111,6 +114,10 @@ class Query () :
                 filters.append(f" {column} >  (NOW() - INTERVAL {val} hour)")
             elif field[-1] == "gtHour" :
                 filters.append(f" {column} <  (NOW() - INTERVAL {val} hour) ")
+            elif field[-1] == 'ltTimer' and type(value) == timedelta :
+                filters.append(f" {column} >  (NOW() - INTERVAL {val.total_seconds()} seconds)")
+            elif field[-1] == "gtTime" and type(value) == timedelta  :
+                filters.append(f" {column} <  (NOW() - INTERVAL {val.total_seconds()} seconds) ")
             elif field[-1] == "gt" : 
                 filters.append(f" {column} > {value} ")
             elif field[-1] == 'lt':
@@ -152,6 +159,7 @@ class Query () :
     def fetchall(self, flatten=False, **kwargs) : 
         self.execute()
         self.RESULT = self.cursor.fetchall()
+        if self.found_rows : self.found_rows = self._found_rows()
         if not self.multiple : self.cursor.close()
         self.RESULT = self._load(self.RESULT, **kwargs)
         if flatten : self.RESULT = sum(self.RESULT, ()) 
@@ -177,7 +185,12 @@ class Query () :
 
     def getInsertID(self) : 
        return self.cursor.insert_id()
-    
+
+    #Get all the available rows
+    def _found_rows(self):
+        self.execute("SELECT found_rows() as count")
+        return self.cursor.fetchone()['count']
+
     #Commits all the transactions
     def commit(*_) :
         mysql.connection.commit()
@@ -225,8 +238,8 @@ class Query () :
         return self._compile()
 
     #The execution with rollback
-    def execute(self) :
-        q = self._compile()
+    def execute(self, q=None) :
+        q = q if  q else self._compile() 
         current_app.logger.info("Query : "+q)
         try : 
             self.cursor.execute(q)
